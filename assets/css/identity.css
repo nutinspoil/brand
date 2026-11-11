@@ -1,0 +1,634 @@
+/* Recessed panels carry raised keys so nested wells do not disappear into their host. */
+
+/* ── bands: one plate per band ────────────────────────────── */
+.stage { position: relative; z-index: 1; padding-block: var(--band); overflow-x: clip; color: var(--fg) }
+.stage--tight { padding-block: var(--band-tight) }
+.stage--wide { padding-block: var(--band-wide) }
+.stage--open { padding-block-start: clamp(1.2rem, 2.6vw, 2.4rem) }
+.stage--close { padding-block-end: clamp(3rem, 6vw, 5.4rem) }
+.stage .shell { position: relative }
+
+/* frost: the plate moulded from blue clay */
+.stage--console .shell, .stage--paper .shell {
+  padding: clamp(1.5rem, 3.2vw, 3rem) clamp(1.2rem, 2.8vw, 2.6rem);
+  border-radius: var(--r-plate);
+  background: linear-gradient(152deg, var(--frost-3) 0%, var(--frost) 42%, var(--frost-2) 100%);
+  box-shadow: var(--plate-hi);
+}
+/* the light sheet: a thinner plate, less lift */
+.stage--paper .shell { box-shadow: var(--plate) }
+
+/* clay: the opening slab of a page */
+.stage--console.stage--open .shell {
+  background:
+    radial-gradient(120% 88% at 10% 0%, var(--clay-lit) 0%, rgba(69, 208, 218, 0) 56%),
+    linear-gradient(152deg, var(--clay-lit) 0%, var(--clay) 44%, var(--clay-deep) 100%);
+  box-shadow: var(--plate-hi);
+}
+/* sea: the closing plate */
+.stage--console.stage--close .shell {
+  background: linear-gradient(152deg, var(--sea) 0%, var(--sea-deep) 100%);
+  box-shadow: var(--plate-hi);
+}
+
+/* ── the plinth: discs of the same clay, stacked under the opening slab ── */
+.stage--open .shell::before, .stage--open .shell::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%;
+}
+.stage--open .shell::after {
+  right: clamp(-14rem, -12vw, -6rem); bottom: clamp(-11rem, -8vw, -5rem);
+  width: clamp(16rem, 26vw, 24rem); aspect-ratio: 1;
+  background: radial-gradient(circle at 32% 26%, rgba(247, 251, 255, .5), rgba(220, 234, 251, .18) 62%, rgba(200, 221, 243, .1));
+  box-shadow: inset 8px 8px 18px rgba(255, 255, 255, .5), inset -12px -14px 26px rgba(6, 40, 63, .12),
+    30px 36px 64px -34px rgba(6, 32, 54, .55);
+}
+.stage--open .shell::before {
+  right: clamp(-26rem, -22vw, -12rem); bottom: clamp(-19rem, -14vw, -9rem);
+  width: clamp(26rem, 44vw, 42rem); aspect-ratio: 1;
+  border: 1px solid rgba(242, 248, 255, .34);
+  background: radial-gradient(circle, rgba(242, 248, 255, .12) 0 58%, rgba(242, 248, 255, .04) 58% 82%, transparent 82%);
+}
+
+/* ── band head ────────────────────────────────────────────── */
+.stage-head { display: grid; gap: 1rem; margin-bottom: clamp(1.8rem, 3.4vw, 2.8rem) }
+.stage-title { min-width: 0 }
+.stage-title h2 { max-width: 22ch }
+.stage-note { max-width: 54ch; font-size: 1rem; line-height: 1.65; color: var(--fg-2) }
+@media (min-width: 901px) {
+  .stage-head:has(.stage-note) { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: end; column-gap: clamp(2rem, 5vw, 4.5rem) }
+}
+.band-foot { margin-top: 1.2rem; max-width: 84ch; font: 400 .8rem/1.55 var(--f-mono); color: var(--fg-3) }
+
+/* ── the mast: the opening plate, one layout per page type ── */
+.mast { display: grid; gap: clamp(1.6rem, 3vw, 2.6rem); align-items: start }
+.mast-lead, .mast-rail, .mast-index, .mast-mark { min-width: 0 }
+.doc-title h1 { max-width: 18ch }
+.doc-title h1 em { display: block; margin-top: .12em }
+.doc-title .lede { margin-top: 1.3rem; max-width: 52ch; line-height: 1.65 }
+.mast-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.7rem }
+
+.mast-mark { display: grid; gap: .55rem; justify-items: start }
+.medallion {
+  position: relative; display: grid; place-items: center;
+  padding: clamp(9px, 1.2vw, 14px); border-radius: 50%;
+  background: linear-gradient(146deg, #fdfefe, var(--frost) 46%, var(--frost-2));
+  box-shadow: var(--lift-sm);
+}
+.seal--lg { width: clamp(78px, 8.4vw, 108px); height: clamp(78px, 8.4vw, 108px) }
+/* the registration notch: one mint index pressed into the ring */
+.medallion-notch {
+  position: absolute; right: 1px; top: 50%; width: 13px; height: 13px; transform: translateY(-50%);
+  border-radius: 50%; background: var(--mint);
+  box-shadow: 0 0 0 4px rgba(44, 196, 188, .22), inset 1px 1px 2px rgba(255, 255, 255, .7), inset -1px -2px 3px rgba(6, 40, 63, .28);
+}
+.wordmark { font: 800 clamp(1.05rem, 1.9vw, 1.42rem)/1.1 var(--f-label); letter-spacing: -.025em; text-transform: uppercase; color: var(--fg); max-width: 20ch; text-shadow: var(--letter-raised) }
+.wordmark span { display: block }
+.mast-owner { font: 400 .86rem/1.4 var(--f-body); color: var(--fg-2) }
+
+/* on the clay slab the title sits in a frost tile — the reference's light squircle */
+.stage--console.stage--open .mast-lead {
+  padding: clamp(1.2rem, 2.4vw, 2.1rem) clamp(1.1rem, 2.2vw, 1.9rem);
+  border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe 0%, var(--frost) 42%, var(--frost-2) 100%);
+  box-shadow: var(--lift-sm);
+}
+.stage--console.stage--open .mast-lead .lede { color: var(--ink-2) }
+
+@media (min-width: 1040px) {
+  .mast { grid-template-columns: minmax(0, 1.5fr) minmax(230px, .48fr); grid-template-areas: "lead rail" "index index" }
+  .mast-lead { grid-area: lead } .mast-rail { grid-area: rail } .mast-index { grid-area: index }
+  /* the brand plate: the name at plate scale, the disc in front of it */
+  .mast--brand { grid-template-columns: minmax(0, 1.05fr) minmax(250px, .5fr); grid-template-areas: "mark rail" "lead rail" "index index" }
+  .mast--brand .mast-mark { grid-area: mark; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem 1.5rem; align-items: center }
+  .mast--brand .medallion { grid-column: 1; grid-row: 1; position: relative }
+  .mast--brand .wordmark { grid-column: 2; grid-row: 1; font-size: clamp(2.3rem, 4.5vw, 3.8rem); line-height: 1.06; letter-spacing: -.035em; max-width: 8ch }
+  .mast--brand .mast-owner { grid-column: 2; margin-top: 0; color: var(--fg-2) }
+  .mast--brand .doc-title h1 { font-size: clamp(1.8rem, 2.9vw, 2.7rem); max-width: 22ch }
+  .mast--brand .mast-lead { margin-top: .5rem }
+  .mast--index { grid-template-columns: minmax(0, 1.45fr) minmax(230px, .52fr) }
+  .mast--record { grid-template-columns: minmax(0, 1.1fr) minmax(250px, .7fr) }
+  .mast--record .mast-rail { padding-left: clamp(1rem, 2vw, 1.8rem); border-left: 1px solid var(--hair) }
+  .mast--sector { grid-template-columns: minmax(0, 1.75fr) minmax(210px, .38fr) }
+  /* the horizontal readout: a docket of inset cells under the title */
+  .mast--module, .mast--terminal, .mast--document { grid-template-columns: minmax(0, 1fr); grid-template-areas: "lead" "rail" "index" }
+  .mast--module .spec, .mast--terminal .spec, .mast--document .spec { grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); margin-top: clamp(1.4rem, 2.6vw, 2.1rem) }
+  .mast--module .spec-row, .mast--terminal .spec-row, .mast--document .spec-row { padding-inline: clamp(.9rem, 1.6vw, 1.4rem) }
+  .mast--module .spec-row:first-child, .mast--terminal .spec-row:first-child, .mast--document .spec-row:first-child { padding-inline-start: 0 }
+  .mast--module .spec-row:not(:first-child), .mast--terminal .spec-row:not(:first-child), .mast--document .spec-row:not(:first-child) { border-left: 1px solid var(--hair) }
+  .mast--module .spec-row:last-child, .mast--terminal .spec-row:last-child, .mast--document .spec-row:last-child { border-bottom: 0 }
+  .mast--document .mast-lead, .mast--document .spec { max-width: 82ch }
+  .mast--terminal .doc-title h1 { max-width: 20ch }
+  .mast > .ledger { grid-column: 1 / -1 }
+}
+
+/* ── the index deck: keys moulded from the deck, in a cut well ── */
+.index {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem); padding: clamp(1rem, 1.9vw, 1.5rem);
+  border-radius: var(--r-card); background: var(--recess);
+  box-shadow: var(--cut);
+}
+/* on the clay slab and the sea plate the deck is its own raised frost sheet,
+   a shade darker than the keys so the keys read as moulded out of it */
+.stage--console.stage--open .index, .stage--console.stage--close .index {
+  background: linear-gradient(152deg, var(--frost) 0%, var(--frost-2) 100%);
+  box-shadow: var(--plate);
+}
+.index-head { margin-bottom: .9rem; font: 500 .64rem/1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--fg-3) }
+.index-keys { display: grid; gap: .5rem }
+.index-key {
+  display: grid; grid-template-columns: clamp(30px, 3vw, 42px) minmax(0, 1fr); gap: 0 .9rem; align-items: baseline;
+  padding: .72rem .85rem; border-radius: var(--r-well); text-decoration: none; color: var(--fg-2);
+  background: var(--neu-face); box-shadow: var(--key);
+  transition: color .16s, transform .16s var(--ease-out), box-shadow .16s;
+}
+.index-key:hover, .index-key:focus-visible { color: var(--fg); transform: translateY(-2px); box-shadow: var(--key-hi) }
+.index-key:active { transform: translateY(1px); box-shadow: var(--key-press) }
+.index-key.is-held {
+  background: linear-gradient(150deg, #4fdad0, var(--mint) 55%, var(--mint-deep));
+  color: var(--ink); box-shadow: var(--accent-plate);
+}
+.index-key.is-held:hover { color: var(--ink); box-shadow: var(--accent-plate-hi) }
+.index-no { font: 500 .68rem/1.4 var(--f-mono); letter-spacing: .1em; color: var(--link) }
+.index-key.is-held .index-no { color: var(--ink) }
+.index-name { font: 700 1rem/1.3 var(--f-label); letter-spacing: -.018em; text-shadow: var(--letter-relief) }
+.fold-q, .stop-where, .spec-row dd, .stub-brand p, .foot-brand strong { text-shadow: var(--letter-relief) }
+.index-note { grid-column: 2; font: 400 .8rem/1.45 var(--f-body); color: var(--fg-3) }
+.index-key.is-held .index-note { color: rgba(6, 40, 63, .8) }
+.index-read {
+  display: flex; flex-wrap: wrap; gap: .5rem; align-items: baseline;
+  margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--hair);
+  font: 400 .84rem/1.5 var(--f-mono); color: var(--fg-2);
+}
+.index-tag { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--link) }
+/* the slider: a rail cut into the deck, with a clay knob at the held position */
+.index-bar {
+  position: relative; display: block; height: 8px; margin-top: 1.1rem;
+  border-radius: var(--r-pill); background: var(--recess);
+  box-shadow: inset 0 2px 5px var(--neu-lo), inset 0 -1px 2px var(--neu-hi);
+}
+.index-bar i {
+  position: relative; display: block; height: 100%; width: var(--pos, 17%);
+  border-radius: var(--r-pill); background: linear-gradient(90deg, var(--mint-deep), var(--mint));
+  transition: width .28s var(--ease);
+}
+.index-bar i::after {
+  content: ""; position: absolute; right: -9px; top: 50%; width: 17px; height: 17px;
+  transform: translateY(-50%); border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #fff, var(--frost) 58%, var(--frost-2));
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, .9), inset -2px -3px 5px rgba(10, 45, 78, .2),
+    3px 5px 9px -3px rgba(6, 32, 54, .55);
+}
+@media (min-width: 700px) {
+  .index-keys { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .index-key { grid-template-columns: minmax(0, 1fr); align-content: start }
+  .index-note { grid-column: 1 }
+}
+@media (min-width: 1040px) { .index-keys { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+
+/* ── the routing rail: a channel cut in the plate, one lit stop ── */
+.conveyor-wrap { position: relative; margin-top: clamp(1.6rem, 3vw, 2.2rem) }
+.conveyor-track {
+  position: absolute; left: 0; right: 0; top: 5px; display: block; height: 3px;
+  border-radius: var(--r-pill); background: var(--recess);
+  box-shadow: inset 0 1px 3px var(--neu-lo), inset 0 -1px 2px var(--neu-hi);
+}
+.conveyor-line {
+  position: absolute; inset: 0; transform-origin: left center; border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--mint-deep), var(--mint));
+}
+.conveyor { display: grid; gap: clamp(1rem, 1.8vw, 1.4rem) }
+.stop { position: relative; min-width: 0; padding-top: 2rem }
+.stop::before {
+  content: ""; position: absolute; left: 0; top: 0; width: 13px; height: 13px; border-radius: 50%;
+  background: var(--neu-face);
+  box-shadow: -2px -2px 5px var(--neu-hi), 3px 3px 6px var(--neu-lo);
+}
+.stop-no { display: block; font: 500 .68rem/1 var(--f-mono); letter-spacing: .18em; color: var(--fg-3) }
+.stop-where { display: block; margin-top: .55rem; font: 700 1.05rem/1.2 var(--f-label); letter-spacing: -.024em; color: var(--fg) }
+.stop-note { display: block; margin-top: .45rem; max-width: 28ch; font-size: .89rem; line-height: 1.5; color: var(--fg-2) }
+.stop.is-now::before {
+  width: 15px; height: 15px; background: radial-gradient(circle at 34% 28%, #6fe0d7, var(--mint) 62%, var(--mint-deep));
+  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, .55), inset -3px -3px 6px rgba(6, 74, 88, .3),
+    0 0 0 4px rgba(44, 196, 188, .2), 3px 5px 10px -4px rgba(6, 32, 54, .5);
+}
+.stop.is-now .stop-no { color: var(--link) }
+.stop.is-now .stop-where, .stop.is-now .stop-note { color: var(--fg) }
+.stop-act {
+  display: inline-flex; align-items: center; gap: .45rem; margin-top: .9rem; min-height: 44px; padding: .55rem 1.05rem;
+  border-radius: var(--r-pill); background: var(--cta-bg); color: var(--cta-fg); text-decoration: none;
+  box-shadow: var(--cta-plate);
+  font: 700 .7rem/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase;
+  transition: transform .16s var(--ease-out), box-shadow .16s;
+}
+.stop-act:hover { color: var(--cta-fg); transform: translateY(-2px); box-shadow: var(--cta-plate-hi) }
+.stop-act:active { transform: translateY(1px); box-shadow: var(--cut) }
+@media (min-width: 700px) { .conveyor { grid-template-columns: repeat(var(--stops, 5), minmax(0, 1fr)) } }
+
+/* ── the ledger: a stack of keys moulded from the plate ────── */
+.ledger { display: grid; gap: .5rem }
+.row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto clamp(22px, 2.4vw, 30px);
+  gap: clamp(.7rem, 1.6vw, 1.4rem); align-items: baseline;
+  padding: clamp(1rem, 1.7vw, 1.3rem) clamp(.8rem, 1.3vw, 1.1rem); border-radius: var(--r-well);
+  text-decoration: none; color: var(--fg);
+  background: var(--neu-face); box-shadow: var(--key);
+  transition: background .18s, box-shadow .18s, transform .18s var(--ease-out);
+}
+.row-main { min-width: 0; display: grid; gap: .6rem }
+.row-main b { font: 700 clamp(1.08rem, 1.6vw, 1.28rem)/1.28 var(--f-label); letter-spacing: -.026em; color: var(--fg); text-wrap: balance; text-shadow: var(--letter-relief); transition: color .18s }
+.row-main i { font-style: normal; font-size: 1rem; line-height: 1.6; color: var(--fg-2); max-width: 60ch; text-wrap: pretty }
+.row-state { font: 600 .64rem/1 var(--f-label); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); white-space: nowrap }
+.row-go { justify-self: end; font: 400 .95rem/1 var(--f-mono); color: var(--link); transition: transform .2s var(--ease) }
+.row:hover { box-shadow: var(--key-hi); transform: translateY(-2px) }
+.row:active { transform: translateY(1px); box-shadow: var(--key-press) }
+.row:hover .row-main b { color: var(--link) }
+.row:hover .row-go { transform: translateX(4px) }
+.ledger--next { margin-top: clamp(.4rem, 1vw, .8rem) }
+@media (max-width: 649px) {
+  .row { grid-template-columns: minmax(0, 1fr) clamp(20px, 6vw, 28px); gap: .8rem; align-items: start }
+  .row-main { grid-column: 1; grid-row: 1 }
+  .row-state { grid-column: 1; grid-row: 2; white-space: normal; line-height: 1.5 }
+  .row-go { grid-column: 2; grid-row: 1; padding-top: .2rem }
+}
+
+/* ── the spread: materials held against each other ─────────── */
+.spread { display: grid; gap: clamp(1rem, 2.1vw, 1.7rem) }
+.panel {
+  min-width: 0; padding: clamp(1.3rem, 2.4vw, 2rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  box-shadow: var(--lift-sm);
+}
+/* on a frost plate the neutral panel is cut, not raised */
+.stage--console:not(.stage--open):not(.stage--close) .panel {
+  background: var(--recess); box-shadow: var(--cut);
+}
+.panel > h3 { margin-top: .7rem }
+.panel-note { font: 500 .64rem/1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--link) }
+.panel-copy { margin-top: 1rem; font-size: 1rem; line-height: 1.65; color: var(--fg-2); max-width: 62ch }
+.panel .panel-copy + .panel-copy { margin-top: .7rem }
+.panel .text-link { margin-top: 1.1rem }
+/* the sea pill */
+.panel--ink {
+  background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  box-shadow: var(--lift-sea-sm);
+}
+.panel--ink h3 { color: var(--chalk) }
+.panel--ink .panel-copy { color: var(--chalk-2) }
+.stage--console.stage--close .panel--ink { background: var(--recess); box-shadow: var(--cut) }
+/* the turquoise slab: navy ink, never white */
+.panel--clay {
+  background:
+    radial-gradient(120% 90% at 12% 0%, var(--clay-lit) 0%, rgba(69, 208, 218, 0) 58%),
+    linear-gradient(152deg, var(--clay-lit) 0%, var(--clay) 44%, var(--clay-deep) 100%);
+  box-shadow: var(--lift-clay-sm);
+}
+.panel--clay h3 { color: var(--ink) }
+.panel--clay .panel-copy { color: var(--ink-2) }
+.panel--clay .panel-note { color: var(--ink) }
+/* the clay slab never stacks on the clay band — there it turns into the sea pill */
+.stage--console.stage--open .panel--clay {
+  --fg: var(--chalk); --fg-2: var(--chalk-2); --fg-3: var(--chalk-3); --link: var(--mint-hi);
+  background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  box-shadow: var(--lift-sea-sm);
+}
+.stage--console.stage--open .panel--clay h3 { color: var(--chalk) }
+.stage--console.stage--open .panel--clay .panel-copy { color: var(--chalk-2) }
+.stage--console.stage--open .panel--clay .panel-note { color: var(--mint-hi) }
+@media (min-width: 901px) { .spread { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)) } }
+
+/* ── the rank: raised tiles of equal weight ───────────────── */
+.rank { display: grid; gap: clamp(1rem, 2vw, 1.6rem) }
+.card {
+  min-width: 0; padding: clamp(1.2rem, 2.2vw, 1.7rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  box-shadow: var(--lift-sm);
+  transition: transform .18s var(--ease-out), box-shadow .18s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--lift) }
+.card > h3 { padding-bottom: .8rem; border-bottom: 1px solid var(--hair) }
+.card .check { margin-top: .9rem }
+.card .panel-copy:first-of-type { margin-top: 1rem }
+.stage--console:not(.stage--open):not(.stage--close) .card {
+  background: var(--recess); box-shadow: var(--cut)
+}
+.stage--console:not(.stage--open):not(.stage--close) .card:hover { transform: none; box-shadow: var(--cut), inset 0 0 0 1px var(--hair-2) }
+@media (min-width: 901px) { .rank { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)) } }
+
+/* ── the pillars: counted keys with a mint rule ───────────── */
+.pillars { display: grid; gap: clamp(1rem, 2vw, 1.5rem) }
+.pillar {
+  min-width: 0; padding: clamp(1.1rem, 2vw, 1.5rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  box-shadow: var(--lift-sm);
+}
+.stage--console:not(.stage--open):not(.stage--close) .pillar {
+  background: var(--recess); box-shadow: var(--cut)
+}
+.stage--console.stage--close .pillar { background: var(--recess); box-shadow: var(--cut) }
+.pillar-no {
+  display: block; font: 800 clamp(1.9rem, 3.4vw, 2.6rem)/1 var(--f-label); letter-spacing: -.05em; color: var(--ink-sea);
+}
+.pillar-no::after {
+  content: ""; display: block; width: 30px; height: 3px; margin-top: .55rem; border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--mint-deep), var(--mint));
+}
+.stage--console.stage--close .pillar-no { color: var(--mint-hi) }
+.pillar-name { margin-top: .8rem; font-size: clamp(1.06rem, 1.6vw, 1.24rem); color: var(--fg) }
+.pillar p { margin-top: .5rem; font-size: .93rem; line-height: 1.58; color: var(--fg-2); max-width: 40ch }
+@media (min-width: 650px) { .pillars { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) } }
+
+/* ── the spine: every stage numbered in a sea key ─────────── */
+.spine { display: grid; gap: .4rem }
+.spine-item {
+  display: grid; grid-template-columns: clamp(44px, 4.6vw, 60px) minmax(0, 1fr);
+  gap: clamp(.8rem, 1.6vw, 1.3rem); align-items: start;
+  padding: clamp(1rem, 1.7vw, 1.3rem) clamp(.6rem, 1.1vw, .9rem); border-radius: var(--r-card);
+  transition: background .18s, box-shadow .18s;
+}
+.spine-item:hover { background: var(--neu-face); box-shadow: var(--key) }
+.spine-no {
+  display: grid; place-items: center; width: clamp(44px, 4.6vw, 60px); height: clamp(44px, 4.6vw, 60px);
+  border-radius: 20px; background: linear-gradient(152deg, var(--sea-lit), var(--sea) 52%, var(--sea-deep));
+  box-shadow: var(--lift-sea-sm), var(--rim-sea);
+  font: 700 .82rem/1 var(--f-label); letter-spacing: .02em; color: var(--chalk);
+}
+.stage--console.stage--close .spine-no {
+  background: linear-gradient(152deg, #4fdad0, var(--mint) 55%, var(--mint-deep)); color: var(--ink);
+  box-shadow: var(--lift-clay-sm), var(--rim-clay);
+}
+.spine-body { min-width: 0 }
+.spine-body h3 { font-size: clamp(1.06rem, 1.6vw, 1.28rem) }
+.spine-body p { margin-top: .5rem; font-size: .94rem; line-height: 1.58; color: var(--fg-2); max-width: 68ch }
+
+/* ── folds: questions that open on the record ─────────────── */
+.folds { display: grid; gap: .7rem }
+.fold {
+  border-radius: var(--r-card); background: var(--neu-face); box-shadow: var(--key); overflow: hidden;
+  transition: box-shadow .18s;
+}
+.fold[open] { box-shadow: var(--key-hi) }
+.fold > summary {
+  display: flex; align-items: center; gap: 1rem; min-height: 56px; padding: 1rem clamp(1rem, 1.9vw, 1.5rem);
+  cursor: pointer; list-style: none;
+}
+.fold > summary::-webkit-details-marker { display: none }
+.fold > summary:hover { background: rgba(255, 255, 255, .16) }
+.stage--console.stage--close .fold > summary:hover { background: rgba(242, 248, 255, .1) }
+.fold-q { flex: 1; min-width: 0; font: 700 clamp(1rem, 1.5vw, 1.14rem)/1.3 var(--f-label); letter-spacing: -.022em; color: var(--fg) }
+.fold-mark {
+  position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--neu-face);
+  box-shadow: -3px -3px 7px var(--neu-hi), 4px 4px 8px var(--neu-lo);
+  transition: transform .2s var(--ease);
+}
+.fold-mark::before, .fold-mark::after {
+  content: ""; position: absolute; left: 50%; top: 50%; border-radius: var(--r-pill); background: var(--fg);
+  transform: translate(-50%, -50%);
+}
+.fold-mark::before { width: 12px; height: 2px }
+.fold-mark::after { width: 2px; height: 12px; transition: transform .2s var(--ease) }
+.fold[open] .fold-mark { transform: rotate(45deg) }
+.fold-a {
+  padding: 0 clamp(1rem, 1.9vw, 1.5rem) clamp(1.1rem, 2vw, 1.5rem);
+  display: grid; gap: .7rem; border-top: 1px solid var(--hair); padding-top: 1rem;
+}
+.fold-a p { font-size: 1rem; line-height: 1.65; color: var(--fg-2); max-width: 66ch }
+
+/* ── real captures: a frost bezel around the photograph ───── */
+.cases { display: grid; gap: clamp(1.4rem, 2.6vw, 2.2rem) }
+.shot { margin: 0; display: grid; gap: .8rem; min-width: 0 }
+.shot-frame {
+  padding: clamp(8px, .9vw, 14px); border-radius: var(--r-card);
+  background: var(--recess); box-shadow: var(--cut);
+}
+.shot-frame img { width: 100%; height: auto; border-radius: calc(var(--r-card) - 6px); box-shadow: 0 6px 16px -10px rgba(6, 32, 54, .6) }
+.shot--portrait .shot-frame { width: min(100%, 420px) }
+.shot-cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .9rem; padding-inline: .3rem; font-size: .82rem; line-height: 1.45; color: var(--fg-2) }
+.shot-cap a { text-decoration: none; border-bottom: 1px solid var(--hair-2) }
+.shot-file { font: 500 .64rem/1.4 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--fg-3) }
+
+/* work that cannot be photographed: the confidential plate */
+.withheld {
+  margin: 0; min-width: 0; display: grid; gap: .7rem; align-content: start;
+  padding: clamp(1.15rem, 2.1vw, 1.7rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  box-shadow: var(--lift-sea-sm), var(--rim-sea);
+}
+.withheld-top { display: flex; align-items: center; gap: .8rem }
+.withheld-top .seal { width: clamp(34px, 3.4vw, 42px); height: clamp(34px, 3.4vw, 42px) }
+.withheld-top .state { margin-left: auto }
+.withheld h3 { color: var(--chalk); font-size: 1.08rem }
+.withheld p { font-size: .92rem; line-height: 1.58; color: var(--chalk-2); max-width: 44ch }
+
+/* ── the case: capture and account held side by side ──────── */
+.case {
+  display: grid; gap: clamp(1.2rem, 2.4vw, 2rem); align-items: start;
+  padding: clamp(1.3rem, 2.4vw, 2rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  box-shadow: var(--lift-sm);
+}
+.stage--console:not(.stage--open):not(.stage--close) .case { background: var(--recess); box-shadow: var(--cut) }
+.case-media { min-width: 0 }
+.case-body { min-width: 0; display: grid; gap: .8rem; align-content: start }
+.case-body h3 { font-size: clamp(1.16rem, 1.9vw, 1.5rem) }
+.case-body > p { font-size: .96rem; line-height: 1.62; color: var(--fg-2); max-width: 62ch }
+.case-body .spec { margin-top: .3rem }
+.case-actions { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; margin-top: .4rem; padding-top: 1rem; border-top: 1px solid var(--hair) }
+@media (min-width: 901px) { .case { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) } }
+
+/* ── the reading column ───────────────────────────────────── */
+.reading { display: grid; gap: clamp(2rem, 4vw, 3.2rem); max-width: 1040px }
+.reading > p { max-width: 66ch }
+.reading-section { display: grid; gap: 1.1rem; min-width: 0 }
+.reading-section h3 { font-size: clamp(1.3rem, 2.2vw, 1.65rem); max-width: 24ch }
+.reading-copy { display: grid; gap: 1rem; min-width: 0; max-width: 66ch }
+@media (min-width: 901px) {
+  .reading-section { grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr); gap: clamp(1.5rem, 4vw, 3rem) }
+}
+.reading h3 .cite {
+  display: inline-block; margin-right: .7rem; padding: .16rem .5rem; border-radius: var(--r-pill);
+  background: linear-gradient(152deg, #4fdad0, var(--mint) 58%, var(--mint-deep));
+  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, .55), inset -1px -2px 4px rgba(6, 74, 88, .3);
+  font: 700 .62rem/1.4 var(--f-mono); letter-spacing: .12em; color: var(--ink); vertical-align: .18em;
+}
+.reading p { font-size: 1.01rem; line-height: 1.68; color: var(--fg-2) }
+.reading ul { display: grid; gap: .55rem; margin: .3rem 0 .4rem }
+.reading li { position: relative; padding-left: 1.5rem; font-size: .98rem; line-height: 1.6; color: var(--fg-2) }
+.reading li::before {
+  content: ""; position: absolute; left: 0; top: .62rem; width: 9px; height: 9px; border-radius: 50%;
+  background: linear-gradient(150deg, var(--clay-lit), var(--clay-deep));
+  box-shadow: -2px -2px 4px var(--neu-hi), 2px 2px 4px var(--neu-lo);
+}
+.legal-stamp {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.4rem;
+  padding: clamp(.9rem, 1.6vw, 1.2rem) clamp(.9rem, 1.7vw, 1.3rem); border-radius: var(--r-tile);
+  background: var(--recess); box-shadow: var(--cut);
+  font: 500 .64rem/1.5 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--fg-3);
+}
+.legal-stamp span:first-child { color: var(--fg) }
+
+/* ── the search well and the subject chips ────────────────── */
+.search { position: relative; display: block; margin-bottom: 1rem }
+.search input {
+  width: 100%; min-height: 54px; padding: .8rem 1rem .8rem 3rem;
+  border-radius: var(--r-pill); border: 1px solid transparent;
+  background: var(--recess); box-shadow: var(--neu-in);
+  font: 400 1rem/1.4 var(--f-body); color: var(--fg); caret-color: var(--link);
+  transition: box-shadow .16s;
+}
+.search input::placeholder { color: var(--fg-3) }
+.search input:hover { box-shadow: var(--neu-in), inset 0 0 0 1px var(--hair-2) }
+.search input:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; box-shadow: var(--key-press) }
+.search-glyph { position: absolute; left: 1.1rem; top: 50%; width: 15px; height: 15px; transform: translateY(-54%); border: 2px solid var(--link); border-radius: 50% }
+.search-glyph::after {
+  content: ""; position: absolute; right: -6px; bottom: -3px; width: 8px; height: 2px; border-radius: var(--r-pill);
+  background: var(--link); transform: rotate(45deg); transform-origin: right center;
+}
+.chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.4rem }
+.chip {
+  min-height: 42px; padding: .6rem 1.05rem; cursor: pointer; border-radius: var(--r-pill);
+  border: 1px solid transparent; background: var(--neu-face); box-shadow: var(--key);
+  font: 600 .74rem/1 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-2);
+  transition: color .16s, transform .16s var(--ease-out), box-shadow .16s;
+}
+.chip:hover { color: var(--fg); transform: translateY(-2px); box-shadow: var(--key-hi) }
+.chip:active { transform: translateY(1px); box-shadow: var(--key-press) }
+.chip[aria-pressed="true"] {
+  background: linear-gradient(152deg, #4fdad0, var(--mint) 55%, var(--mint-deep));
+  color: var(--ink); box-shadow: var(--accent-plate);
+}
+.chip[aria-pressed="true"]:hover { color: var(--ink); box-shadow: var(--accent-plate-hi) }
+.empty-note {
+  margin-top: 1.2rem; padding: 1rem 1.2rem; border-radius: var(--r-tile);
+  background: var(--recess); box-shadow: var(--cut);
+  font-size: .94rem; line-height: 1.55; color: var(--fg-2);
+}
+
+/* ── the enquiry: brief and transcript on one rail, form on the other ── */
+.enq { display: grid; gap: clamp(1.2rem, 2.2vw, 1.8rem); align-items: start }
+.enq-brief { min-width: 0; display: grid; gap: .9rem; align-content: start }
+.enq-brief > h2 { max-width: 20ch }
+.enq-brief .check { margin-top: .3rem }
+.transcript {
+  min-width: 0; display: grid; gap: .9rem; align-content: start;
+  padding: clamp(1.1rem, 2vw, 1.5rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  box-shadow: var(--lift-sea-sm), var(--rim-sea);
+}
+.transcript-top {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1rem;
+  padding-bottom: .8rem; border-bottom: 1px solid var(--hair);
+  font: 500 .64rem/1.4 var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--chalk-3);
+}
+.transcript-top span:last-child { color: var(--mint-hi) }
+.transcript-body {
+  margin: 0; min-height: 8.5rem; font: 400 .86rem/1.62 var(--f-mono); color: var(--chalk);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  padding: .9rem 1rem; border-radius: var(--r-well); background: var(--recess);
+  box-shadow: var(--cut);
+}
+.transcript-empty { color: var(--chalk-3) }
+.transcript-foot { font-size: .8rem; line-height: 1.5; color: var(--chalk-3); max-width: 52ch }
+@media (min-width: 980px) {
+  .enq {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1.18fr);
+    grid-template-areas: "brief form" "transcript form"; gap: clamp(1.4rem, 2.4vw, 2.2rem) clamp(1.6rem, 3vw, 2.6rem);
+  }
+  .enq-brief { grid-area: brief }
+  .transcript { grid-area: transcript; position: sticky; top: 6.5rem }
+  .enq .form { grid-area: form }
+}
+
+/* ── the quiet button: a key moulded from the surface ──────── */
+.btn--ghost { box-shadow: var(--key) }
+.btn--ghost:hover { color: var(--fg); box-shadow: var(--key-hi) }
+.btn--ghost:active { box-shadow: var(--key-press) }
+
+/* ── the closing: a stub well and one sheet of frost ──────── */
+.closing { display: grid; gap: clamp(1.2rem, 2.4vw, 1.8rem); align-items: stretch }
+.closing-stub {
+  display: grid; align-content: start; gap: .9rem;
+  padding: clamp(1.1rem, 2vw, 1.5rem); border-radius: var(--r-card);
+  background: var(--recess); box-shadow: var(--cut);
+}
+.stub-brand { display: grid; gap: .95rem 1.1rem; justify-items: start; align-items: center; grid-auto-flow: column; grid-auto-columns: minmax(0, auto) }
+.stub-brand .medallion { padding: clamp(10px, 1.3vw, 16px); box-shadow: var(--lift-on-dark-sm) }
+.stub-brand .seal--lg { width: clamp(94px, 11vw, 138px); height: clamp(94px, 11vw, 138px) }
+.stub-brand p { font: 800 .95rem/1.15 var(--f-label); letter-spacing: -.012em; text-transform: uppercase; color: var(--chalk); max-width: 15ch }
+.closing-main {
+  min-width: 0; display: grid; align-content: center; gap: .9rem;
+  padding: clamp(1.4rem, 2.8vw, 2.4rem) clamp(1.2rem, 2.4vw, 2rem); border-radius: var(--r-card);
+  background: linear-gradient(152deg, #fdfefe, var(--frost) 40%, var(--frost-2));
+  box-shadow: var(--plate);
+}
+.closing-main h2 { max-width: 22ch }
+.closing-main p { max-width: 62ch; font-size: .99rem; line-height: 1.62; color: var(--fg-2) }
+.closing-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.4rem; margin-top: .4rem }
+@media (min-width: 901px) {
+  .closing { grid-template-columns: clamp(190px, 18vw, 260px) minmax(0, 1fr) }
+  .closing-stub { align-content: center }
+  .stub-brand { grid-auto-flow: row; justify-items: start }
+}
+
+/* ── the floating draft key ───────────────────────────────── */
+.wa-float {
+  position: fixed; right: clamp(14px, 2.6vw, 30px); bottom: clamp(14px, 2.6vw, 30px); z-index: 190;
+  display: inline-flex; align-items: center; gap: .6rem;
+  min-height: 56px; padding: .75rem; border-radius: var(--r-pill); text-decoration: none;
+  background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  box-shadow: var(--lift-sea-sm), var(--rim-sea);
+  transition: transform .18s var(--ease-out), box-shadow .18s, padding .18s var(--ease);
+}
+.wa-float:hover { transform: translateY(-3px); box-shadow: var(--lift-sea), var(--rim-sea); padding-inline-end: 1.1rem }
+.wa-float:active { transform: translateY(1px); box-shadow: var(--well-sea) }
+.wa-float:focus-visible { outline: 3px solid var(--chalk); outline-offset: 3px }
+.wa-glyph { flex: none; width: 30px; height: 30px; fill: var(--mint) }
+.wa-handset { fill: var(--sea-deep) }
+.wa-label {
+  display: inline-block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
+  font: 700 .74rem/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; color: var(--chalk);
+  transition: max-width .24s var(--ease), opacity .2s var(--ease);
+}
+.wa-float:hover .wa-label, .wa-float:focus-visible .wa-label { max-width: 15ch; opacity: 1 }
+@media (max-width: 640px) { .wa-float { padding: .7rem; min-height: 52px } .wa-glyph { width: 27px; height: 27px } }
+
+/* ── the authored sequence: one line drawn, then the stamp settles ── */
+.js [data-route] .conveyor-line { transform: scaleX(0); transition: transform 1.15s var(--ease) }
+.js [data-route].is-drawn .conveyor-line { transform: scaleX(1) }
+.js [data-stamp] { opacity: 0; transform: translateY(14px) }
+.js [data-stamp].is-stamped { opacity: 1; transform: none; transition: opacity .7s var(--ease), transform .7s var(--ease-out) }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-route] .conveyor-line, .js [data-stamp] { opacity: 1; transform: none; transition: none }
+  .wa-float, .wa-label, .index-bar i { transition: none }
+}
+
+/* ── the guide ledger: counted rows, tighter ──────────────── */
+.ledger--index .row { padding-block: clamp(.85rem, 1.4vw, 1.05rem) }
+.ledger--index .row-main i { font-size: .88rem }
+
+/* ── narrow screens: one column, one rhythm ───────────────── */
+@media (max-width: 1039px) {
+  .mast-rail { padding-top: 1.1rem; border-top: 1px solid var(--hair) }
+  .mast--brand .mast-mark {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto;
+    align-items: center; gap: .7rem 1rem; padding-left: 0;
+  }
+  .mast--brand .medallion { position: static; grid-column: 1; grid-row: 1 }
+  .mast--brand .wordmark { grid-column: 2; grid-row: 1; font-size: clamp(1.25rem, 6.2vw, 2.3rem); line-height: 1.12; letter-spacing: -.03em }
+  .mast--brand .mast-owner { grid-column: 1 / -1; grid-row: 2; margin-top: 0 }
+  .mast-actions .btn { flex: 1 1 auto }
+}
+@media (max-width: 640px) {
+  .stage-head { margin-bottom: 1.4rem }
+  .mast { gap: 1.3rem }
+  .mast--brand .medallion { padding: 8px }
+  .mast--brand .seal--lg { width: 58px; height: 58px }
+  .index-key { padding: .66rem .72rem }
+  .spine-item { grid-template-columns: clamp(38px, 11vw, 50px) minmax(0, 1fr) }
+  .spine-no { width: clamp(38px, 11vw, 50px); height: clamp(38px, 11vw, 50px); border-radius: 16px; font-size: .72rem }
+  .row { padding: 1rem .95rem }
+  .case-body .spec { margin-top: .2rem }
+  .closing-main { padding: 1.3rem 1.1rem }
+  .closing-actions { gap: .7rem 1.1rem }
+  .wa-label { display: none }
+}
