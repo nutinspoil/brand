@@ -20,27 +20,27 @@
   --frost-3: #f2f8ff;
   --frost-edge: #b7d0ee;
 
-  /* clay: the turquoise slab */
-  --clay: #23bcc9;
-  --clay-lit: #45d0da;
-  --clay-deep: #1fb3c2;
+  /* clay: the blue slab */
+  --clay: #6fa9df;
+  --clay-lit: #a7d0f4;
+  --clay-deep: #5c98d0;
 
   /* sea: the deep pill */
   --sea: #0b5f92;
   --sea-lit: #1273a0;
   --sea-deep: #084a74;
 
-  /* mint: the lit key */
-  --mint: #2cc4bc;
-  --mint-deep: #17a89f;
-  --mint-hi: #a8eee7;      /* the mint that carries small text on the sea */
+  /* blue: the lit key */
+  --mint: #73ace0;
+  --mint-deep: #5c98d0;
+  --mint-hi: #bad8f3;      /* the pale blue that carries small text on the sea */
 
   /* navy ink — the only ink the ground and the clay will carry */
-  --ink: #06283f;           /* 6.18 ground · 13.91 frost · 5.99 clay */
-  --ink-2: #0e3a58;         /* 4.84 ground · 9.75 frost-2 · 4.69 clay */
+  --ink: #06283f;           /* primary ink on light blue surfaces */
+  --ink-2: #0e3a58;         /* secondary ink on light blue surfaces */
   --ink-3: #164669;         /* 9.55 frost-3 — frost plates only, never the ground */
   --ink-sea: #0a5f92;       /* 5.63 frost — the link on frost */
-  --ink-mint: #0b6f6a;      /* 4.94 frost — the tick on frost */
+  --ink-mint: #2d679b;      /* blue tick on frost */
 
   /* chalk on the sea */
   --chalk: #f2f8ff;         /* 6.41 sea · 14.21 ink */
@@ -92,18 +92,17 @@
     inset 5px 5px 11px rgba(255, 255, 255, .7), inset -7px -9px 18px rgba(10, 45, 78, .16),
     15px 19px 38px -18px rgba(3, 26, 44, .62);
 
-  /* clay reads between the two: a saturated body catches a whiter light and drops
-     a greener-shade shadow than the pale frost does */
+  /* blue clay catches a whiter light and drops a deep blue shade */
   --lift-clay:
-    inset 6px 6px 14px rgba(255, 255, 255, .58), inset -9px -12px 24px rgba(4, 84, 98, .22),
-    -16px -16px 34px rgba(255, 255, 255, .18), 22px 28px 56px -24px rgba(4, 84, 98, .5);
+    inset 6px 6px 14px rgba(255, 255, 255, .58), inset -9px -12px 24px rgba(10, 45, 78, .22),
+    -16px -16px 34px rgba(255, 255, 255, .18), 22px 28px 56px -24px rgba(10, 45, 78, .5);
   --lift-clay-sm:
-    inset 5px 5px 11px rgba(255, 255, 255, .52), inset -7px -9px 18px rgba(4, 84, 98, .2),
-    -11px -11px 24px rgba(255, 255, 255, .16), 15px 19px 38px -18px rgba(4, 84, 98, .46);
+    inset 5px 5px 11px rgba(255, 255, 255, .52), inset -7px -9px 18px rgba(10, 45, 78, .2),
+    -11px -11px 24px rgba(255, 255, 255, .16), 15px 19px 38px -18px rgba(10, 45, 78, .46);
   --lift-clay-tight:
-    inset 4px 4px 9px rgba(255, 255, 255, .48), inset -5px -6px 12px rgba(4, 84, 98, .18),
-    9px 12px 24px -14px rgba(4, 84, 98, .44);
-  --well-clay: inset 5px 6px 12px rgba(4, 84, 98, .34), inset -4px -4px 9px rgba(255, 255, 255, .42);
+    inset 4px 4px 9px rgba(255, 255, 255, .48), inset -5px -6px 12px rgba(10, 45, 78, .18),
+    9px 12px 24px -14px rgba(10, 45, 78, .44);
+  --well-clay: inset 5px 6px 12px rgba(10, 45, 78, .34), inset -4px -4px 9px rgba(255, 255, 255, .42);
 
   /* the register answers, not the rule: every surface names which stack its own
      raised body, its hover, its cut and its edge are made of */
@@ -162,6 +161,15 @@ body::before {
     radial-gradient(46% 38% at 82% 4%, var(--ground-deep) 0%, rgba(95, 154, 216, 0) 68%),
     radial-gradient(64% 52% at 4% -4%, var(--ground-lit) 0%, rgba(151, 186, 228, 0) 74%),
     linear-gradient(158deg, var(--ground-lit) 0%, var(--ground) 48%, #74a1d1 100%);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: url("../img/logo-shield.png") center / cover no-repeat;
+  opacity: .2; transform-origin: center; animation: background-shield-turn 8s linear infinite;
+}
+@keyframes background-shield-turn {
+  from { transform: perspective(1000px) rotateY(0deg) }
+  to { transform: perspective(1000px) rotateY(360deg) }
 }
 
 main, .site-header, .site-footer { position: relative; z-index: 1 }
@@ -316,12 +324,9 @@ pre { margin: 0; font-family: inherit }
 .seal {
   position: relative; flex: none; display: block;
   width: clamp(44px, 4.5vw, 54px); height: clamp(44px, 4.5vw, 54px);
-  border-radius: 50%; overflow: hidden; background: var(--frost-3);
-  box-shadow: inset 0 0 0 1px rgba(242, 248, 255, .45),
-    -3px -3px 8px rgba(255, 255, 255, .14), 5px 7px 14px rgba(3, 26, 44, .5);
+  overflow: visible;
 }
-.seal img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 46% }
-.brand:hover .seal, .brand:focus-visible .seal { box-shadow: inset 0 0 0 2px var(--mint), 0 0 0 5px rgba(44, 196, 188, .18) }
+.seal img { width: 100%; height: 100%; object-fit: contain; object-position: center }
 .brand-name { display: block; min-width: 0 }
 .brand-name strong { font: 800 .82rem/1.06 var(--f-label); letter-spacing: -.01em; text-transform: uppercase; color: var(--chalk) }
 
@@ -515,18 +520,18 @@ pre { margin: 0; font-family: inherit }
 .form-note { font-size: .87rem; line-height: 1.55; color: var(--fg-3); max-width: 64ch }
 .form-status {
   padding: .78rem .95rem; border-radius: var(--r-well);
-  background: var(--recess); box-shadow: var(--neu-press), inset 0 0 0 1px rgba(23, 168, 159, .5);
+  background: var(--recess); box-shadow: var(--neu-press), inset 0 0 0 1px rgba(92, 152, 208, .5);
   font: 500 .89rem/1.45 var(--f-body); color: var(--fg);
 }
 .form-status:empty { display: none }
 
 /* ── footer: the sea plate, square bottom corners into the page edge ─ */
 .site-footer {
-  margin: clamp(2rem, 4vw, 3.4rem) auto 0; padding-block: clamp(2.6rem, 5vw, 4.2rem) clamp(1.4rem, 2.4vw, 1.9rem);
+  margin: clamp(1.5rem, 3vw, 2.6rem) auto 0; padding-block: clamp(1.8rem, 3vw, 2.8rem) .9rem;
   background: linear-gradient(168deg, var(--sea) 0%, var(--sea-deep) 100%);
   border-radius: var(--r-plate) var(--r-plate) 0 0;
   box-shadow:
-    inset 3px 3px 9px rgba(255, 255, 255, .2), inset -5px -7px 16px rgba(3, 26, 44, .4),
+    inset 5px 5px 12px rgba(255, 255, 255, .18), inset -8px -10px 22px rgba(3, 26, 44, .48),
     0 -22px 48px -26px rgba(6, 32, 54, .7);
 }
 .foot-grid { display: grid; gap: clamp(1.6rem, 3.4vw, 3rem); grid-template-columns: minmax(0, 1.6fr) repeat(auto-fit, minmax(min(100%, 170px), 1fr)) }
@@ -535,11 +540,15 @@ pre { margin: 0; font-family: inherit }
 .foot-brand p { margin-top: .55rem; font-size: .9rem; line-height: 1.55; color: var(--chalk-2) }
 .foot-col { display: grid; align-content: start; gap: 0 }
 .foot-col h2 { font: 700 .7rem/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; color: var(--chalk-3); margin-bottom: .9rem }
-.foot-col a { padding: .5rem 0; border-bottom: 1px solid var(--hair-chalk); font-size: .92rem; line-height: 1.5; text-decoration: none; color: var(--chalk-2) }
-.foot-col a:hover { color: var(--mint-hi) }
+.foot-col a {
+  padding: .35rem 0; border-bottom: 1px solid var(--hair-chalk);
+  font-size: .92rem; line-height: 1.5; text-decoration: none; color: var(--chalk-2);
+  transition: color .16s, padding-left .16s var(--ease-out);
+}
+.foot-col a:hover, .foot-col a:focus-visible { padding-left: .35rem; color: var(--mint-hi) }
 .foot-bottom {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 1.5rem;
-  margin-top: clamp(1.8rem, 3.4vw, 2.8rem); padding-top: 1.15rem; border-top: 1px solid var(--hair-chalk);
+  margin-top: clamp(1.2rem, 2.2vw, 1.8rem); padding-top: .8rem; border-top: 1px solid var(--hair-chalk);
   font: 600 .68rem/1.4 var(--f-label); letter-spacing: .06em; text-transform: uppercase; color: var(--chalk-3);
 }
 .foot-bottom a { color: var(--chalk-2); text-decoration: none }
