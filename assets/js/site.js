@@ -193,23 +193,26 @@
   }));
 
   // The enquiry terminal: a live transcript, then a WhatsApp draft the visitor sends themselves.
-  const REQUIRED = ['name', 'category', 'brief'];
+  const REQUIRED = ['name', 'category', 'idea'];
 
   function noteLines(values) {
     return [
       'Hello Emmanuel, I would like to discuss a project with Success Above Dreams.',
       '',
       `Name: ${values.get('name') || '-'}`,
-      `Business: ${values.get('business') || 'Not provided'}`,
+      `Organisation or project name: ${values.get('organisation') || 'Not provided'}`,
       `Email: ${values.get('email') || 'Not provided'}`,
-      `Phone: ${values.get('phone') || 'Not provided'}`,
-      `Project type: ${values.get('category') || '-'}`,
-      `Industry: ${values.get('industry') || 'Not provided'}`,
+      `Telephone or WhatsApp: ${values.get('phone') || 'Not provided'}`,
+      `What kind of idea is this?: ${values.get('category') || '-'}`,
       '',
-      'Project brief:',
-      values.get('brief') || '-',
-      `Budget range: ${values.get('budget') || 'Not provided'}`,
-      `Target timing: ${values.get('timeline') || 'Not provided'}`
+      'What are you trying to create or improve?:',
+      values.get('idea') || '-',
+      `Who is it for?: ${values.get('audience') || 'Not provided'}`,
+      `What exists today?: ${values.get('today') || 'Not provided'}`,
+      `What should become possible?: ${values.get('future') || 'Not provided'}`,
+      `What stage are you at?: ${values.get('stage') || 'Not provided'}`,
+      `Expected timing: ${values.get('timing') || 'Not provided'}`,
+      `Budget, if known: ${values.get('budget') || 'Not provided'}`
     ].join('\n');
   }
 
