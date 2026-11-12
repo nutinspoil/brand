@@ -197,7 +197,7 @@
 
   function noteLines(values) {
     return [
-      'Hello Emmanuel, I would like to discuss a project with Success Above Dreams.',
+      'Hello Emmanuel, I would like to start a conversation with Success Above Dreams.',
       '',
       `Name: ${values.get('name') || '-'}`,
       `Organisation or project name: ${values.get('organisation') || 'Not provided'}`,

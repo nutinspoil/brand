@@ -527,32 +527,40 @@ pre { margin: 0; font-family: inherit }
 
 /* ── footer: the sea plate, square bottom corners into the page edge ─ */
 .site-footer {
-  margin: clamp(1.5rem, 3vw, 2.6rem) auto 0; padding-block: clamp(1.8rem, 3vw, 2.8rem) .9rem;
-  background: linear-gradient(168deg, var(--sea) 0%, var(--sea-deep) 100%);
-  border-radius: var(--r-plate) var(--r-plate) 0 0;
-  box-shadow:
-    inset 5px 5px 12px rgba(255, 255, 255, .18), inset -8px -10px 22px rgba(3, 26, 44, .48),
-    0 -22px 48px -26px rgba(6, 32, 54, .7);
+  --fg: var(--ink); --fg-2: var(--ink-2); --fg-3: var(--ink-3);
+  --link: var(--ink-sea); --hair: var(--hair-ink); --hair-2: var(--hair-ink-2);
+  --face: var(--frost); --recess: var(--frost-2);
+  --cta-bg: var(--sea); --cta-fg: var(--chalk); --cta-plate: var(--lift-sea-sm); --cta-plate-hi: var(--lift-sea);
+  --neu-face: rgba(255, 255, 255, .32); --neu-hi: rgba(255, 255, 255, .82); --neu-lo: rgba(10, 45, 78, .18);
+  width: min(100% - (var(--pad) * 2), var(--shell));
+  margin: clamp(1rem, 2vw, 1.8rem) auto clamp(1.5rem, 3vw, 2.6rem);
+  padding-block: 1.2rem .8rem;
+  background: linear-gradient(152deg, var(--frost-3) 0%, var(--frost) 42%, var(--frost-2) 100%);
+  border: 1px solid rgba(117, 164, 211, .18);
+  border-radius: var(--r-plate);
+  box-shadow: var(--lift-sm), inset 0 0 0 1px rgba(255,255,255,.18);
+  color: var(--fg);
 }
-.foot-grid { display: grid; gap: clamp(1.6rem, 3.4vw, 3rem); grid-template-columns: minmax(0, 1.6fr) repeat(auto-fit, minmax(min(100%, 170px), 1fr)) }
-.foot-brand { display: flex; gap: 1rem; align-items: flex-start; max-width: 46ch }
-.foot-brand strong { display: block; font: 800 .86rem/1.1 var(--f-label); letter-spacing: -.01em; text-transform: uppercase; color: var(--chalk) }
-.foot-brand p { margin-top: .55rem; font-size: .9rem; line-height: 1.55; color: var(--chalk-2) }
+.site-footer > .shell { width: 100%; max-width: none; padding-inline: clamp(1.2rem, 2.8vw, 2.6rem) }
+.foot-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.5fr) repeat(auto-fit, minmax(min(100%, 150px), 1fr)); align-items: start }
+.foot-brand { display: flex; gap: .75rem; align-items: flex-start; max-width: 40ch }
+.foot-brand strong { display: block; font: 800 .72rem/1.1 var(--f-label); letter-spacing: -.01em; text-transform: uppercase; color: var(--ink) }
+.foot-brand p { margin-top: .35rem; font-size: .72rem; line-height: 1.45; color: var(--ink-2) }
 .foot-col { display: grid; align-content: start; gap: 0 }
-.foot-col h2 { font: 700 .7rem/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; color: var(--chalk-3); margin-bottom: .9rem }
+.foot-col h2 { font: 700 .62rem/1 var(--f-label); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .5rem }
 .foot-col a {
-  padding: .35rem 0; border-bottom: 1px solid var(--hair-chalk);
-  font-size: .92rem; line-height: 1.5; text-decoration: none; color: var(--chalk-2);
+  padding: .2rem 0; border-bottom: 1px solid var(--hair-ink);
+  font-size: .74rem; line-height: 1.4; text-decoration: none; color: var(--ink-2);
   transition: color .16s, padding-left .16s var(--ease-out);
 }
-.foot-col a:hover, .foot-col a:focus-visible { padding-left: .35rem; color: var(--mint-hi) }
+.foot-col a:hover, .foot-col a:focus-visible { padding-left: .2rem; color: var(--sea) }
 .foot-bottom {
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 1.5rem;
-  margin-top: clamp(1.2rem, 2.2vw, 1.8rem); padding-top: .8rem; border-top: 1px solid var(--hair-chalk);
-  font: 600 .68rem/1.4 var(--f-label); letter-spacing: .06em; text-transform: uppercase; color: var(--chalk-3);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .45rem 1rem;
+  margin-top: .9rem; padding-top: .6rem; border-top: 1px solid var(--hair-ink);
+  font: 600 .56rem/1.4 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3);
 }
-.foot-bottom a { color: var(--chalk-2); text-decoration: none }
-.foot-bottom a:hover { color: var(--mint-hi) }
+.foot-bottom a { color: var(--ink-2); text-decoration: none }
+.foot-bottom a:hover { color: var(--sea) }
 
 @media (max-width: 900px) {
   .foot-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) }
