@@ -172,7 +172,9 @@
     const query = document.querySelector(`[data-search="${key}"]`)?.value.trim().toLowerCase() || '';
     const items = [...document.querySelectorAll(`[data-filter-item][data-filter-group="${key}"]`)];
     items.forEach(item => {
-      const matchesCategory = choice === 'all' || item.dataset.category === choice;
+      const catAttr = item.dataset.category || '';
+      const catList = catAttr.split(/\s+/).filter(Boolean);
+      const matchesCategory = choice === 'all' || catAttr === choice || catList.includes(choice);
       const matchesSearch = !query || item.textContent.toLowerCase().includes(query);
       item.hidden = !(matchesCategory && matchesSearch);
     });
@@ -196,24 +198,27 @@
   const REQUIRED = ['name', 'category', 'idea'];
 
   function noteLines(values) {
-    return [
+    const lines = [
       'Hello Emmanuel, I would like to start a conversation with Success Above Dreams.',
       '',
       `Name: ${values.get('name') || '-'}`,
-      `Organisation or project name: ${values.get('organisation') || 'Not provided'}`,
-      `Email: ${values.get('email') || 'Not provided'}`,
-      `Telephone or WhatsApp: ${values.get('phone') || 'Not provided'}`,
-      `What kind of idea is this?: ${values.get('category') || '-'}`,
+      `Organisation or project: ${values.get('organisation') || values.get('business') || 'Not provided'}`,
+      `Email or WhatsApp: ${values.get('contact') || values.get('phone') || values.get('email') || 'Not provided'}`,
+      `Category: ${values.get('category') || '-'}`,
       '',
       'What are you trying to create or improve?:',
-      values.get('idea') || '-',
+      values.get('idea') || values.get('brief') || '-',
+      '',
       `Who is it for?: ${values.get('audience') || 'Not provided'}`,
-      `What exists today?: ${values.get('today') || 'Not provided'}`,
-      `What should become possible?: ${values.get('future') || 'Not provided'}`,
-      `What stage are you at?: ${values.get('stage') || 'Not provided'}`,
-      `Expected timing: ${values.get('timing') || 'Not provided'}`,
-      `Budget, if known: ${values.get('budget') || 'Not provided'}`
-    ].join('\n');
+      `What should become possible?: ${values.get('future') || values.get('possible') || 'Not provided'}`
+    ];
+
+    const timing = values.get('timing') || values.get('timeline');
+    const budget = values.get('budget');
+    if (timing) lines.push(`Expected timing: ${timing}`);
+    if (budget) lines.push(`Budget, if known: ${budget}`);
+
+    return lines.join('\n');
   }
 
   document.querySelectorAll('[data-whatsapp-form]').forEach(form => {
