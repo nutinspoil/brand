@@ -42,6 +42,9 @@
   --ink-sea: #0a5f92;       /* 5.63 frost — the link on frost */
   --ink-mint: #2d679b;      /* blue tick on frost */
 
+  /* error: the one non-blue ink, reserved for field validation */
+  --alert: #8a2418;
+
   /* chalk on the sea */
   --chalk: #f2f8ff;         /* 6.41 sea · 14.21 ink */
   --chalk-2: #cfe4f7;       /* 5.25 sea */
@@ -185,10 +188,21 @@ p { margin: 0; text-wrap: pretty }
 a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px }
 a:hover { color: var(--fg) }
 img { max-width: 100%; height: auto; display: block }
+img.is-missing { display: none }
+.img-fallback {
+  display: grid; place-items: center; min-height: 220px; padding: 1.5rem;
+  border-radius: inherit; background: var(--recess); box-shadow: var(--cut);
+  color: var(--fg-2); font: 500 .85rem/1.5 var(--f-label); text-align: center;
+}
 ul, ol { margin: 0; padding: 0; list-style: none }
 dl { margin: 0 }
 button, input, select, textarea { font: inherit; color: inherit }
 pre { margin: 0; font-family: inherit }
+[hidden] { display: none !important }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
 
 :focus-visible {
   outline: 3px solid var(--link); outline-offset: 3px; border-radius: 8px;
@@ -500,6 +514,33 @@ pre { margin: 0; font-family: inherit }
 .field--full { grid-column: 1 / -1 }
 .field > label { font: 600 .65rem/1.3 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3) }
 .field > label b { color: var(--link); font-weight: 600 }
+.field-error { font: 500 .82rem/1.45 var(--f-body); color: var(--alert); letter-spacing: 0; text-transform: none }
+.field-hint { font-size: .8rem; line-height: 1.45; color: var(--fg-3) }
+.form-group { border: 0; margin: 0; padding: 0; min-width: 0 }
+.form-group-label {
+  width: 100%;
+  margin: 0 0 .9rem;
+  padding: 0 0 .7rem;
+  border-bottom: 1px solid var(--hair);
+  font: 700 .65rem/1.3 var(--f-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sea);
+}
+.form-group-label span {
+  margin-left: .6rem;
+  font: 400 .8rem/1.4 var(--f-body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--fg-3);
+}
+@media (max-width: 560px) {
+  .form-group-label span { display: block; margin: .3rem 0 0 }
+}
+.field input[aria-invalid="true"], .field select[aria-invalid="true"], .field textarea[aria-invalid="true"] {
+  box-shadow: var(--neu-in), inset 0 0 0 1.5px var(--alert);
+}
+.field .consent input[aria-invalid="true"] { outline: 2px solid var(--alert); outline-offset: 2px }
 .field input:not([type="checkbox"]), .field select, .field textarea {
   width: 100%; min-width: 0; min-height: 50px; padding: .72rem .9rem;
   background: var(--recess); border: 1px solid transparent; border-radius: var(--r-well);

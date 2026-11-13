@@ -76,7 +76,7 @@
             </nav>
             <div class="doc-title">
               <h1>Everything we have carried through.</h1>
-              <p class="lede">Success Above Dreams is Emmanuel Drah’s digital product brand. This is the complete record of the work: websites, online stores, applications, internal systems, custom software, prototypes, and products that remain private to the organisations using them.</p>
+              <p class="lede">The complete record: public websites and stores, private operational systems, custom software, and active prototypes. Public work links to the live product; private work shows the system logic without exposing client data.</p>
             </div>
             <div class="mast-actions">
               <a class="btn btn--go" href="../start-a-project/">Start a conversation <span class="arrow" aria-hidden="true">&#8599;</span></a>
@@ -94,6 +94,11 @@
                 <dd>Real screenshots for public work; structured schematics and workflow maps for private work.</dd>
               </div>
             </dl>
+            <p class="record-tally">
+              <span><b>3</b> live and public</span>
+              <span><b>2</b> private systems</span>
+              <span><b>1</b> active prototype</span>
+            </p>
           </div>
         </div>
       </div>
@@ -113,39 +118,43 @@
             <button class="chip" type="button" data-filter="all" data-filter-group="work" aria-pressed="true">All work</button>
             <button class="chip" type="button" data-filter="websites" data-filter-group="work" aria-pressed="false">Websites</button>
             <button class="chip" type="button" data-filter="online-stores" data-filter-group="work" aria-pressed="false">Online stores</button>
-            <button class="chip" type="button" data-filter="applications" data-filter-group="work" aria-pressed="false">Applications</button>
-            <button class="chip" type="button" data-filter="internal-systems" data-filter-group="work" aria-pressed="false">Internal systems</button>
+            <button class="chip" type="button" data-filter="operational-systems" data-filter-group="work" aria-pressed="false">Operational systems</button>
             <button class="chip" type="button" data-filter="custom-software" data-filter-group="work" aria-pressed="false">Custom software</button>
-            <button class="chip" type="button" data-filter="experiments" data-filter-group="work" aria-pressed="false">Experiments</button>
-            <button class="chip" type="button" data-filter="private-work" data-filter-group="work" aria-pressed="false">Private work</button>
-            <button class="chip" type="button" data-filter="ongoing-work" data-filter-group="work" aria-pressed="false">Ongoing work</button>
+            <button class="chip" type="button" data-filter="prototypes" data-filter-group="work" aria-pressed="false">Prototypes</button>
           </div>
+
+          <div class="work-toolbar">
+            <p class="work-count" data-filter-count="work">Showing 6 of 6 projects</p>
+            <button class="reset-link" type="button" data-filter-reset="work" hidden>Reset filters</button>
+          </div>
+          <p class="visually-hidden" data-filter-announcer="work" role="status" aria-live="polite" aria-atomic="true"></p>
 
           <div class="work-catalogue">
             <!-- 1. FEATURED PUBLIC WORK (Visually dominant) -->
             <article class="work-featured" data-filter-item data-filter-group="work" data-category="websites all">
-              <div class="work-featured-media">
-                <img src="../assets/img/work-nsvilla.jpg" alt="NS Luxury Villa hospitality website preview" width="1600" height="1000" loading="lazy">
-              </div>
+              <a class="work-featured-media" href="ns-luxury-villa/" aria-hidden="true" tabindex="-1">
+                <img src="../assets/img/work-nsvilla.jpg" alt="" width="1600" height="1000" loading="lazy">
+              </a>
               <div class="work-featured-body">
-                <span class="work-featured-badge">Featured Public Work</span>
-                <h2 class="work-featured-title">NS Luxury Villa</h2>
+                <span class="work-featured-badge">Featured public work</span>
+                <h2 class="work-featured-title"><a href="ns-luxury-villa/">NS Luxury Villa</a></h2>
                 <div class="work-meta-list">
                   <span class="work-meta-tag">Website</span>
                   <span class="work-meta-tag">Hospitality</span>
                   <span class="work-meta-tag">Lokoe, Ho</span>
-                  <span class="work-meta-tag" style="color:var(--sea);">Live</span>
+                  <span class="work-meta-tag work-meta-status">Live</span>
                 </div>
                 <p class="work-featured-desc">
-                  A guest-facing accommodation website built so prospective travelers can explore room categories, compare amenities, view authentic photography, and review rates before reaching the front desk.
+                  A guest-facing accommodation website so prospective travellers can explore room categories, compare amenities, view authentic photography, and review rates before reaching the front desk.
                 </p>
                 <dl class="spec">
                   <div class="spec-row"><dt>Situation</dt><dd>Guests repeatedly called to ask about room prices, directions, and pool availability.</dd></div>
-                  <div class="spec-row"><dt>What changed</dt><dd>Guests can now review the main stay information before contacting the property.</dd></div>
+                  <div class="spec-row"><dt>Users</dt><dd>Prospective guests and reservation staff.</dd></div>
+                  <div class="spec-row"><dt>Result</dt><dd>Guests can review the main stay information before contacting the property.</dd></div>
                 </dl>
                 <div class="work-card-actions">
                   <a class="btn btn--go" href="ns-luxury-villa/">Read the case study <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                  <a class="text-link" href="https://www.nsvilla.com" target="_blank" rel="noopener noreferrer">View live product <span class="arrow" aria-hidden="true">&#8599;</span></a>
+                  <a class="text-link" href="https://www.nsvilla.com" target="_blank" rel="noopener noreferrer">Open the live site <span class="arrow" aria-hidden="true">&#8599;</span></a>
                 </div>
               </div>
             </article>
@@ -154,198 +163,193 @@
             <div class="work-grid">
               <!-- 2. CR Cosmetics & Essentials -->
               <article class="work-card" data-filter-item data-filter-group="work" data-category="online-stores all">
-                <div class="work-card-media">
-                  <img src="../assets/img/work-crcosmetics.jpg" alt="CR Cosmetics &amp; Essentials online store" width="1600" height="1000" loading="lazy">
-                </div>
+                <a class="work-card-media" href="cr-cosmetics/" aria-hidden="true" tabindex="-1">
+                  <img src="../assets/img/work-crcosmetics.jpg" alt="" width="1600" height="1000" loading="lazy">
+                </a>
                 <div class="work-card-body">
                   <div class="work-card-meta">
                     <span>E-commerce · Beauty retail</span>
                     <span class="status-pill">Live</span>
                   </div>
-                  <h3 class="work-card-title">CR Cosmetics &amp; Essentials</h3>
+                  <h3 class="work-card-title"><a href="cr-cosmetics/">CR Cosmetics &amp; Essentials</a></h3>
                   <p class="work-card-desc">
                     An online storefront in Accra that moved a retail business away from temporary WhatsApp status sales into structured product browsing, Cedis pricing, and unified checkout.
                   </p>
-                  <dl class="spec" style="margin-top:.4rem;">
-                    <div class="spec-row"><dt>Context</dt><dd>Retail commerce · Accra</dd></div>
-                    <div class="spec-row"><dt>Visibility</dt><dd>Public storefront</dd></div>
-                    <div class="spec-row"><dt>Outcome</dt><dd>Customers browse products, check prices, and submit delivery details together.</dd></div>
+                  <dl class="spec">
+                    <div class="spec-row"><dt>Situation</dt><dd>Availability, prices, and delivery were answered one conversation at a time.</dd></div>
+                    <div class="spec-row"><dt>Users</dt><dd>Shoppers and order fulfilment staff.</dd></div>
+                    <div class="spec-row"><dt>Result</dt><dd>Customers browse products, check prices, and submit delivery details together.</dd></div>
                   </dl>
                   <div class="work-card-actions">
                     <a class="text-link" href="cr-cosmetics/">Read the case study <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                    <a class="text-link" href="https://www.crcosmeticsgh.com" target="_blank" rel="noopener noreferrer">View live product <span class="arrow" aria-hidden="true">&#8599;</span></a>
+                    <a class="text-link" href="https://www.crcosmeticsgh.com" target="_blank" rel="noopener noreferrer">Open the live store <span class="arrow" aria-hidden="true">&#8599;</span></a>
                   </div>
                 </div>
               </article>
 
               <!-- 3. Retail POS & Operational Shift Ledger (Private Work with schematic evidence) -->
-              <article class="work-card" data-filter-item data-filter-group="work" data-category="internal-systems custom-software private-work all">
-                <div class="schematic-frame">
-                  <span class="schematic-tag">Workflow Map · Private</span>
-                  <div class="workflow-nodes">
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon"></span>
-                      <span>Item Scan / Fast Lookup</span>
-                      <span class="workflow-node-state">Logged</span>
-                    </div>
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon"></span>
-                      <span>Tender: Cash / MoMo Split</span>
-                      <span class="workflow-node-state">Tendered</span>
-                    </div>
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon"></span>
-                      <span>Live Stock Decrement</span>
-                      <span class="workflow-node-state">Adjusted</span>
-                    </div>
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon"></span>
-                      <span>Shift Close &amp; Reconciliation</span>
-                      <span class="workflow-node-state">Balanced</span>
+              <article class="work-card" data-filter-item data-filter-group="work" data-category="operational-systems custom-software all">
+                <a class="work-card-media" href="business-systems/" aria-hidden="true" tabindex="-1">
+                  <div class="schematic-frame">
+                    <span class="schematic-tag">Workflow map · Private</span>
+                    <div class="workflow-nodes">
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon"></span>
+                        <span>Item Scan / Fast Lookup</span>
+                        <span class="workflow-node-state">Logged</span>
+                      </div>
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon"></span>
+                        <span>Tender: Cash / MoMo Split</span>
+                        <span class="workflow-node-state">Tendered</span>
+                      </div>
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon"></span>
+                        <span>Live Stock Decrement</span>
+                        <span class="workflow-node-state">Adjusted</span>
+                      </div>
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon"></span>
+                        <span>Shift Close &amp; Reconciliation</span>
+                        <span class="workflow-node-state">Balanced</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
                 <div class="work-card-body">
                   <div class="work-card-meta">
                     <span>Internal system · Retail operations</span>
-                    <span class="status-pill" style="color:var(--fg-2);">Private</span>
+                    <span class="status-pill status-pill--quiet">Private</span>
                   </div>
-                  <h3 class="work-card-title">Retail Point-of-Sale &amp; Shift Ledger</h3>
+                  <h3 class="work-card-title"><a href="business-systems/">Retail Point-of-Sale &amp; Shift Ledger</a></h3>
                   <p class="work-card-desc">
-                    A counter-facing transaction system built for retail staff to handle rapid customer checkout, record split payments, and prevent inventory and cash reconciliation gaps.
+                    A counter-facing transaction system for retail staff to handle rapid checkout, record split payments, and prevent inventory and cash reconciliation gaps.
                   </p>
-                  <dl class="spec" style="margin-top:.4rem;">
-                    <div class="spec-row"><dt>Context</dt><dd>Counter retail &amp; inventory control</dd></div>
-                    <div class="spec-row"><dt>Visibility</dt><dd>Private operational software</dd></div>
-                    <div class="spec-row"><dt>Outcome</dt><dd>Transactions and inventory counts align automatically at daily close.</dd></div>
+                  <dl class="spec">
+                    <div class="spec-row"><dt>Situation</dt><dd>Paper books and manual stock counts left daily gaps between sales and bankings.</dd></div>
+                    <div class="spec-row"><dt>Users</dt><dd>Cashiers, supervisors, and owners.</dd></div>
+                    <div class="spec-row"><dt>Result</dt><dd>Transactions and inventory counts align automatically at daily close.</dd></div>
                   </dl>
                   <div class="work-card-actions">
                     <a class="text-link" href="business-systems/">Read the case study <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                    <a class="text-link" href="../services/pos-development/">POS capabilities <span class="arrow" aria-hidden="true">&#8599;</span></a>
                   </div>
                 </div>
               </article>
 
               <!-- 4. Multi-Role Business Operations Platform (Private Work with redacted schema) -->
-              <article class="work-card" data-filter-item data-filter-group="work" data-category="custom-software internal-systems private-work all">
-                <div class="schematic-frame">
-                  <span class="schematic-tag">Role Schema · Private</span>
-                  <table class="redacted-table" aria-hidden="true">
-                    <thead>
-                      <tr><th>Module</th><th>Role View</th><th>Audit State</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr><td>Order Registry</td><td>Front Staff</td><td><span class="redact-pill" style="width:48px;"></span></td></tr>
-                      <tr><td>Payment Ledger</td><td>Accounts</td><td><span class="redact-pill" style="width:62px;"></span></td></tr>
-                      <tr><td>Inventory Audit</td><td>Store Manager</td><td><span class="redact-pill" style="width:55px;"></span></td></tr>
-                      <tr><td>Reporting Suite</td><td>Executive</td><td><span class="redact-pill" style="width:70px;"></span></td></tr>
-                    </tbody>
-                  </table>
-                </div>
+              <article class="work-card" data-filter-item data-filter-group="work" data-category="operational-systems custom-software all">
+                <a class="work-card-media" href="business-systems/" aria-hidden="true" tabindex="-1">
+                  <div class="schematic-frame">
+                    <span class="schematic-tag">Role schema · Private</span>
+                    <table class="redacted-table">
+                      <caption class="visually-hidden">Module, role view, and audit state for the private operations system</caption>
+                      <thead>
+                        <tr><th scope="col">Module</th><th scope="col">Role view</th><th scope="col">Audit state</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Order Registry</th><td>Front Staff</td><td><span class="redact-pill" style="width:48px;"></span></td></tr>
+                        <tr><th scope="row">Payment Ledger</th><td>Accounts</td><td><span class="redact-pill" style="width:62px;"></span></td></tr>
+                        <tr><th scope="row">Inventory Audit</th><td>Store Manager</td><td><span class="redact-pill" style="width:55px;"></span></td></tr>
+                        <tr><th scope="row">Reporting Suite</th><td>Executive</td><td><span class="redact-pill" style="width:70px;"></span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </a>
                 <div class="work-card-body">
                   <div class="work-card-meta">
                     <span>Custom software · Operations</span>
-                    <span class="status-pill" style="color:var(--fg-2);">Private</span>
+                    <span class="status-pill status-pill--quiet">Private</span>
                   </div>
-                  <h3 class="work-card-title">Multi-Role Business Operations System</h3>
+                  <h3 class="work-card-title"><a href="business-systems/">Multi-Role Business Operations System</a></h3>
                   <p class="work-card-desc">
-                    Tailored operational software consolidating customer service requests, internal task routing, order verification, and administrative audit trails into one system.
+                    Tailored operational software consolidating service requests, internal task routing, order verification, and administrative audit trails into one system.
                   </p>
-                  <dl class="spec" style="margin-top:.4rem;">
-                    <div class="spec-row"><dt>Context</dt><dd>Operational records &amp; role governance</dd></div>
-                    <div class="spec-row"><dt>Visibility</dt><dd>Private enterprise tool</dd></div>
-                    <div class="spec-row"><dt>Outcome</dt><dd>Replaced scattered messaging and spreadsheets with role-based records.</dd></div>
+                  <dl class="spec">
+                    <div class="spec-row"><dt>Situation</dt><dd>Requests and approvals lived across chat threads and separate spreadsheets.</dd></div>
+                    <div class="spec-row"><dt>Users</dt><dd>Front staff, accounts, managers, and executives.</dd></div>
+                    <div class="spec-row"><dt>Result</dt><dd>Replaced scattered messaging and spreadsheets with role-based records.</dd></div>
                   </dl>
                   <div class="work-card-actions">
                     <a class="text-link" href="business-systems/">Read the case study <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                    <a class="text-link" href="../services/business-management-systems/">Operations capabilities <span class="arrow" aria-hidden="true">&#8599;</span></a>
                   </div>
                 </div>
               </article>
 
-              <!-- 5. Offline-Resilient Register Engine (Experiments / Applications / Ongoing) -->
-              <article class="work-card" data-filter-item data-filter-group="work" data-category="applications experiments ongoing-work all">
-                <div class="schematic-frame">
-                  <span class="schematic-tag">Architecture · Prototype</span>
-                  <div class="workflow-nodes">
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
-                      <span>Client Local Indexed Cache</span>
-                      <span class="workflow-node-state">Active</span>
-                    </div>
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
-                      <span>Offline Transaction Queue</span>
-                      <span class="workflow-node-state">Queued</span>
-                    </div>
-                    <div class="workflow-node">
-                      <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
-                      <span>Deterministic Reconnection Sync</span>
-                      <span class="workflow-node-state">Resolving</span>
+              <!-- 5. Offline-Resilient Register Engine (Prototype) -->
+              <article class="work-card" id="offline-register" data-filter-item data-filter-group="work" data-category="prototypes custom-software all">
+                <a class="work-card-media" href="business-systems/" aria-hidden="true" tabindex="-1">
+                  <div class="schematic-frame">
+                    <span class="schematic-tag">Architecture · Prototype</span>
+                    <div class="workflow-nodes">
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
+                        <span>Client Local Indexed Cache</span>
+                        <span class="workflow-node-state">Active</span>
+                      </div>
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
+                        <span>Offline Transaction Queue</span>
+                        <span class="workflow-node-state">Queued</span>
+                      </div>
+                      <div class="workflow-node">
+                        <span class="workflow-node-icon" style="background:#5cc9a7;"></span>
+                        <span>Deterministic Reconnection Sync</span>
+                        <span class="workflow-node-state">Resolving</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
                 <div class="work-card-body">
                   <div class="work-card-meta">
-                    <span>Application · Experimental prototype</span>
-                    <span class="status-pill" style="color:var(--sea);">Ongoing</span>
+                    <span>Prototype · Offline resilience</span>
+                    <span class="status-pill status-pill--quiet">Ongoing</span>
                   </div>
-                  <h3 class="work-card-title">Offline-Resilient Register Engine</h3>
+                  <h3 class="work-card-title"><a href="business-systems/">Offline-Resilient Register Engine</a></h3>
                   <p class="work-card-desc">
-                    An architectural build evaluating browser-native transactional caching and reconciliation so point-of-sale operations keep ringing sales when connectivity drops.
+                    An architectural build evaluating browser-native transactional caching and reconciliation so a register keeps ringing sales when connectivity drops.
                   </p>
-                  <dl class="spec" style="margin-top:.4rem;">
-                    <div class="spec-row"><dt>Context</dt><dd>Intermittent power &amp; network reliability</dd></div>
-                    <div class="spec-row"><dt>Visibility</dt><dd>Verified prototype build</dd></div>
-                    <div class="spec-row"><dt>Status</dt><dd>Ongoing performance testing</dd></div>
+                  <dl class="spec">
+                    <div class="spec-row"><dt>Situation</dt><dd>Intermittent power and network coverage interrupt a till mid-transaction.</dd></div>
+                    <div class="spec-row"><dt>Users</dt><dd>Counter staff in low-connectivity shops.</dd></div>
+                    <div class="spec-row"><dt>State</dt><dd>Ongoing performance testing; not a released product.</dd></div>
                   </dl>
                   <div class="work-card-actions">
-                    <a class="text-link" href="business-systems/">Read technical notes <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                    <a class="text-link" href="../start-a-project/">Discuss offline software <span class="arrow" aria-hidden="true">&#8599;</span></a>
+                    <a class="text-link" href="business-systems/">Read the technical notes <span class="arrow" aria-hidden="true">&#8599;</span></a>
                   </div>
                 </div>
               </article>
 
               <!-- 6. Success Above Dreams Product Platform (Custom Software / Ongoing) -->
-              <article class="work-card" data-filter-item data-filter-group="work" data-category="custom-software websites ongoing-work all">
-                <div class="work-card-media">
-                  <img src="../assets/img/tech-analytics.jpg" alt="Success Above Dreams product system engineering" width="1600" height="1000" loading="lazy">
-                </div>
+              <article class="work-card" data-filter-item data-filter-group="work" data-category="websites custom-software all">
+                <a class="work-card-media" href="../about/" aria-hidden="true" tabindex="-1">
+                  <img src="../assets/img/tech-analytics.jpg" alt="" width="1600" height="1000" loading="lazy">
+                </a>
                 <div class="work-card-body">
                   <div class="work-card-meta">
-                    <span>Custom software · Digital platform</span>
-                    <span class="status-pill">Live / Ongoing</span>
+                    <span>Custom software · This site</span>
+                    <span class="status-pill">Live</span>
                   </div>
-                  <h3 class="work-card-title">SAD Tactile Digital Product System</h3>
+                  <h3 class="work-card-title"><a href="../about/">SAD Tactile Digital Product System</a></h3>
                   <p class="work-card-desc">
-                    The bespoke software architecture, accessible claymorphism design system tokens, and client-side communication bridge engineered to power Success Above Dreams.
+                    The software architecture, design tokens, and client-side enquiry bridge that power this website, built and maintained in-house.
                   </p>
-                  <dl class="spec" style="margin-top:.4rem;">
-                    <div class="spec-row"><dt>Context</dt><dd>Design systems &amp; static performance</dd></div>
-                    <div class="spec-row"><dt>Visibility</dt><dd>Public platform</dd></div>
-                    <div class="spec-row"><dt>Outcome</dt><dd>Zero tracking cookies, sub-second static loads, and direct WhatsApp messaging.</dd></div>
+                  <dl class="spec">
+                    <div class="spec-row"><dt>Situation</dt><dd>The practice needed a site that proved its own engineering rather than describe it.</dd></div>
+                    <div class="spec-row"><dt>Users</dt><dd>Visitors and site maintainers.</dd></div>
+                    <div class="spec-row"><dt>Result</dt><dd>Static delivery, no tracking cookies, and enquiries drafted directly in the browser.</dd></div>
                   </dl>
                   <div class="work-card-actions">
-                    <a class="text-link" href="../about/">Read about the platform <span class="arrow" aria-hidden="true">&#8599;</span></a>
-                    <a class="text-link" href="../process/">Review build process <span class="arrow" aria-hidden="true">&#8599;</span></a>
+                    <a class="text-link" href="../about/">Read about the system <span class="arrow" aria-hidden="true">&#8599;</span></a>
                   </div>
                 </div>
               </article>
             </div>
           </div>
 
-          <p class="empty-note" data-empty-search="work" hidden>No project matches that search or category filter. Choose "All work" or clear your search.</p>
-        </div>
-      </div>
-    </section>
+          <p class="empty-note" data-empty-search="work" hidden>No projects match that search or category filter. Try another term, choose "All work", or reset the filters.</p>
 
-    <!-- WORK HONESTY / TRANSPARENCY NOTE -->
-    <section class="stage stage--editorial">
-      <div class="shell">
-        <div class="editorial-item" style="max-width:840px;margin-inline:auto;">
-          <h3>A note on portfolio evidence and client privacy</h3>
-          <p>
-            Success Above Dreams prioritises authentic evidence over decorative mockups. Where work is public, we provide links to the live products and un-retouched screenshots. Where work is proprietary to a business, client names and private database entries remain confidential; we demonstrate the system architecture, workflow logic, and real operational outcomes instead.
+          <p class="evidence-note">
+            Public work links to the live product with unedited captures. Private work shows system logic and outcomes; client names and records stay confidential. No project on this page reports traffic, revenue, or growth figures.
           </p>
         </div>
       </div>

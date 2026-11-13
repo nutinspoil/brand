@@ -7,7 +7,7 @@
   const openButton = document.querySelector('[data-menu-open]');
   const closeButton = document.querySelector('[data-menu-close]');
   const headerBrand = document.querySelector('.letterhead .brand');
-  const background = [...document.querySelectorAll('main, footer')].filter(element => !menu?.contains(element));
+  const background = [header, ...document.querySelectorAll('main, footer')].filter(element => element && !menu?.contains(element));
   const dropdowns = [...document.querySelectorAll('details.nav-drop')];
   const previousInert = new Map();
   let menuFocusFrame = null;
@@ -51,6 +51,7 @@
       previousInert.set(element, element.hasAttribute('inert'));
       element.setAttribute('inert', '');
     });
+    menu.focus({ preventScroll: true });
     menuFocusFrame = window.requestAnimationFrame(() => {
       menuFocusFrame = null;
       if (!menu.classList.contains('is-open')) return;
@@ -58,6 +59,13 @@
       const items = menuItems();
       (items.includes(closeButton) ? closeButton : items[0] || menu).focus({ preventScroll: true });
     });
+    window.setTimeout(() => {
+      if (!menu.classList.contains('is-open')) return;
+      const active = document.activeElement;
+      if (active !== menu && active !== openButton && active !== document.body) return;
+      const items = menuItems();
+      (items.includes(closeButton) ? closeButton : items[0] || menu).focus({ preventScroll: true });
+    }, 280);
   }
 
   if (menu && !menu.classList.contains('is-open')) menu.setAttribute('inert', '');
@@ -169,7 +177,9 @@
   function refreshGroup(group) {
     const key = group.dataset.filterGroup;
     const choice = group.dataset.activeFilter || 'all';
-    const query = document.querySelector(`[data-search="${key}"]`)?.value.trim().toLowerCase() || '';
+    const input = document.querySelector(`[data-search="${key}"]`);
+    const raw = input?.value.trim() || '';
+    const query = raw.toLowerCase();
     const items = [...document.querySelectorAll(`[data-filter-item][data-filter-group="${key}"]`)];
     items.forEach(item => {
       const catAttr = item.dataset.category || '';
@@ -178,8 +188,27 @@
       const matchesSearch = !query || item.textContent.toLowerCase().includes(query);
       item.hidden = !(matchesCategory && matchesSearch);
     });
+    const visible = items.filter(item => !item.hidden).length;
+    const countText = `Showing ${visible} of ${items.length} project${items.length === 1 ? '' : 's'}`;
+    const count = document.querySelector(`[data-filter-count="${key}"]`);
+    if (count) count.textContent = countText;
+    const reset = document.querySelector(`[data-filter-reset="${key}"]`);
+    if (reset) reset.hidden = choice === 'all' && !query;
     const empty = document.querySelector(`[data-empty-search="${key}"]`);
-    if (empty) empty.hidden = items.some(item => !item.hidden);
+    let emptyMessage = '';
+    if (!visible) {
+      const chosen = group.querySelector(`[data-filter="${choice}"]`)?.textContent.trim();
+      emptyMessage = query
+        ? `No projects match “${raw}”${choice !== 'all' ? ` in ${chosen}` : ''}. Try another term or reset the filters.`
+        : `No projects match ${chosen}. Choose “All work” or reset the filters.`;
+    }
+    if (empty) {
+      empty.hidden = visible > 0;
+      if (emptyMessage) empty.textContent = emptyMessage;
+    }
+    // One live message carries both the result count and the recovery guidance.
+    const announcer = document.querySelector(`[data-filter-announcer="${key}"]`);
+    if (announcer) announcer.textContent = emptyMessage ? `${countText}. ${emptyMessage}` : countText;
   }
   filterGroups.forEach(group => {
     group.dataset.activeFilter = 'all';
@@ -188,6 +217,15 @@
       group.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
       refreshGroup(group);
     }));
+    const key = group.dataset.filterGroup;
+    document.querySelector(`[data-filter-reset="${key}"]`)?.addEventListener('click', () => {
+      const input = document.querySelector(`[data-search="${key}"]`);
+      if (input) input.value = '';
+      group.dataset.activeFilter = 'all';
+      group.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item.dataset.filter === 'all')));
+      refreshGroup(group);
+      input?.focus();
+    });
   });
   document.querySelectorAll('[data-search]').forEach(input => input.addEventListener('input', () => {
     const group = filterGroups.find(item => item.dataset.filterGroup === input.dataset.search);
@@ -195,7 +233,36 @@
   }));
 
   // The enquiry terminal: a live transcript, then a WhatsApp draft the visitor sends themselves.
-  const REQUIRED = ['name', 'category', 'idea'];
+  const REQUIRED = ['name', 'contact', 'category', 'idea'];
+
+  function fieldError(field) {
+    return field.id ? document.getElementById(`${field.id}-error`) : null;
+  }
+
+  function setFieldError(field, invalid) {
+    if (invalid) field.setAttribute('aria-invalid', 'true');
+    else field.removeAttribute('aria-invalid');
+    const error = fieldError(field);
+    if (error) error.hidden = !invalid;
+  }
+
+  function validateEnquiry(form) {
+    let firstInvalid = null;
+    REQUIRED.forEach(key => {
+      const field = form.elements.namedItem(key);
+      if (!field) return;
+      const empty = !String(field.value || '').trim();
+      setFieldError(field, empty);
+      if (empty && !firstInvalid) firstInvalid = field;
+    });
+    const consent = form.elements.namedItem('consent');
+    if (consent) {
+      const unchecked = !consent.checked;
+      setFieldError(consent, unchecked);
+      if (unchecked && !firstInvalid) firstInvalid = consent;
+    }
+    return firstInvalid;
+  }
 
   function noteLines(values) {
     const lines = [
@@ -206,11 +273,11 @@
       `Email or WhatsApp: ${values.get('contact') || values.get('phone') || values.get('email') || 'Not provided'}`,
       `Category: ${values.get('category') || '-'}`,
       '',
-      'What are you trying to create or improve?:',
+      'What are you trying to make possible?:',
       values.get('idea') || values.get('brief') || '-',
       '',
-      `Who is it for?: ${values.get('audience') || 'Not provided'}`,
-      `What should become possible?: ${values.get('future') || values.get('possible') || 'Not provided'}`
+      `Who needs to use it?: ${values.get('audience') || 'Not provided'}`,
+      `What would a useful first version do?: ${values.get('future') || values.get('possible') || 'Not provided'}`
     ];
 
     const timing = values.get('timing') || values.get('timeline');
@@ -235,32 +302,74 @@
         hint.className = 'transcript-empty';
         hint.textContent = 'Fill the form and the message appears here, exactly as WhatsApp will receive it.';
         slip.append(hint);
-        if (state) state.textContent = 'Nothing sent yet';
+        if (state) state.textContent = 'Nothing drafted yet';
         return;
       }
       slip.textContent = noteLines(values);
-      if (state) state.textContent = filled.length === REQUIRED.length ? 'Ready to review' : `${filled.length} of ${REQUIRED.length} essentials filled`;
+      if (state) state.textContent = filled.length === REQUIRED.length
+        ? 'Ready to review'
+        : `Incomplete · ${filled.length} of ${REQUIRED.length} essentials filled`;
     }
 
     form.querySelectorAll('input, select, textarea').forEach(field => {
-      field.addEventListener('input', preview);
-      field.addEventListener('change', preview);
+      field.addEventListener('input', () => {
+        if (REQUIRED.includes(field.name) && String(field.value).trim()) setFieldError(field, false);
+        if (field.name === 'consent' && field.checked) setFieldError(field, false);
+        preview();
+      });
+      field.addEventListener('change', () => {
+        if (REQUIRED.includes(field.name) && String(field.value).trim()) setFieldError(field, false);
+        if (field.name === 'consent' && field.checked) setFieldError(field, false);
+        preview();
+      });
     });
     preview();
 
     form.addEventListener('submit', event => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
+      const firstInvalid = validateEnquiry(form);
+      const status = form.querySelector('[data-form-status]');
+      if (firstInvalid) {
+        firstInvalid.focus();
+        if (status) status.textContent = 'Add the missing details marked above, then prepare the message.';
+        return;
+      }
       preview();
       const url = `https://wa.me/233543671806?text=${encodeURIComponent(noteLines(new FormData(form)))}`;
       const draft = window.open(url, '_blank');
       if (draft) draft.opener = null;
-      const status = form.querySelector('[data-form-status]');
+      if (state) state.textContent = 'Message prepared';
       if (status) status.textContent = draft
         ? 'WhatsApp opened with your draft. Read it, change anything you like, then press Send.'
         : 'Your browser blocked the WhatsApp tab. Allow pop-ups for this site, or use the direct link beside the button.';
     });
   });
+
+  // Keep deep links clear of the folding header once fonts settle.
+  const hashTarget = location.hash.length > 1
+    ? document.getElementById(decodeURIComponent(location.hash.slice(1)))
+    : null;
+  if (hashTarget) {
+    const realign = () => {
+      if (location.hash.length > 1) hashTarget.scrollIntoView({ block: 'start' });
+    };
+    window.addEventListener('load', () => window.setTimeout(realign, 80));
+    document.fonts?.ready.then(() => window.setTimeout(realign, 80));
+  }
+
+  // A failed content image leaves a readable note instead of an empty frame.
+  function showImageFallback(image) {
+    if (image.dataset.fallbackApplied || !image.closest('main') || !image.alt.trim()) return;
+    image.dataset.fallbackApplied = 'true';
+    image.classList.add('is-missing');
+    const note = document.createElement('span');
+    note.className = 'img-fallback';
+    note.textContent = `Image unavailable: ${image.alt.trim()}`;
+    image.insertAdjacentElement('afterend', note);
+  }
+  document.addEventListener('error', event => {
+    if (event.target instanceof HTMLImageElement) showImageFallback(event.target);
+  }, true);
 
   document.querySelectorAll('[data-year]').forEach(item => { item.textContent = String(new Date().getFullYear()); });
 })();
