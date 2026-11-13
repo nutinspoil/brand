@@ -89,6 +89,7 @@
             <dl class="spec">
               <div class="spec-row"><dt>Practice area</dt><dd>POS, Inventory &amp; Operations Software</dd></div>
               <div class="spec-row"><dt>Visibility</dt><dd>Private operational software</dd></div>
+              <div class="spec-row"><dt>Users</dt><dd>Cashiers, supervisors, and owners</dd></div>
               <div class="spec-row"><dt>Client confidentiality</dt><dd>Interfaces and transaction databases stay with client organisations</dd></div>
               <div class="spec-row"><dt>Evidence format</dt><dd>Verified architecture schematics, state flows, and workflow diagrams</dd></div>
             </dl>
@@ -101,6 +102,20 @@
     <article class="stage stage--wide">
       <div class="shell">
         <div class="case-layout">
+
+          <!-- SYSTEM LOOP AT A GLANCE -->
+          <section class="case-block case-loop">
+            <div class="case-section-head">
+              <h2>One sale, fully accounted for</h2>
+            </div>
+            <ol class="loop-strip">
+              <li>Record sale</li>
+              <li>Split cash / mobile money</li>
+              <li>Update inventory</li>
+              <li>Close shift</li>
+              <li>Manager reviews</li>
+            </ol>
+          </section>
 
           <!-- 2. SITUATION & 3. INTENDED USERS -->
           <div class="case-split">
@@ -127,6 +142,9 @@
               </p>
               <p>
                 <strong>Store managers &amp; accountants:</strong> Supervisors who oversee shift handovers, approve voided line items, monitor live stock levels, and review verified end-of-day banking summaries.
+              </p>
+              <p>
+                <strong>Owners:</strong> Business owners who need reporting, inventory visibility, and an audit history that shows who changed what, and when.
               </p>
             </section>
           </div>
@@ -161,6 +179,19 @@
             </section>
           </div>
 
+          <!-- WHY THIS MATTERS: before the architecture -->
+          <section class="case-block why-block">
+            <div class="case-section-head">
+              <h3>Why this matters</h3>
+            </div>
+            <p>
+              Every step in that loop is money that has to agree by the end of the day. When the register, the cash drawer, and the shelf tell different stories, the shortfall lands on the attendant or the owner.
+            </p>
+            <p>
+              The system exists so those three records agree automatically, shift by shift, instead of being reconstructed weeks later.
+            </p>
+          </section>
+
           <!-- 6. IMPORTANT DECISIONS & 7. CONSTRAINTS -->
           <section class="case-block">
             <div class="case-section-head">
@@ -169,19 +200,19 @@
             </div>
             <div class="case-decisions">
               <div class="case-decision-item">
-                <h4>1. Keyboard and touch speed over visual ornamentation</h4>
-                <p>Every millisecond counts when a queue forms. Transitions were kept minimal and keyboard shortcuts were prioritized so an entire five-item transaction can be processed in under 12 seconds.</p>
+                <h3>1. Keyboard and touch speed over visual ornamentation</h3>
+                <p>Every millisecond counts when a queue forms. Transitions were kept minimal and keyboard shortcuts were prioritised so an entire five-item transaction completes in under 12 seconds in internal testing.</p>
               </div>
               <div class="case-decision-item">
-                <h4>2. Strict role separation between cashier and manager</h4>
+                <h3>2. Strict role separation between cashier and manager</h3>
                 <p>To eliminate shrinkage, cashiers cannot alter historical prices or void completed lines without manager approval. The manager's dashboard maintains an indelible audit trail of all manual overrides.</p>
               </div>
               <div class="case-decision-item">
-                <h4>3. End-of-shift blind reconciliation</h4>
+                <h3>3. End-of-shift blind reconciliation</h3>
                 <p>At shift end, attendants count their drawer before seeing the system expected total. This prevents cashiers from adjusting numbers to mask drawer discrepancies.</p>
               </div>
               <div class="case-decision-item">
-                <h4>4. Technical constraint: Offline operational continuity</h4>
+                <h3>4. Technical constraint: Offline operational continuity</h3>
                 <p>Because shop connectivity in commercial districts can drop unexpectedly, the register maintains local indexed storage so counter checkout continues uninterrupted during outages.</p>
               </div>
             </div>
@@ -222,18 +253,22 @@
 
               <div class="schematic-frame" style="border-radius:var(--r-card);">
                 <span class="schematic-tag">Role Permission Boundary</span>
-                <table class="redacted-table" aria-hidden="true">
-                  <thead>
-                    <tr><th>Operational Area</th><th>Attendant</th><th>Manager</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>Item Checkout</td><td>Permitted</td><td>Permitted</td></tr>
-                    <tr><td>Price Override</td><td>Restricted</td><td>Authenticated</td></tr>
-                    <tr><td>Line Void / Return</td><td>Restricted</td><td>Logged</td></tr>
-                    <tr><td>Drawer Shift Balance</td><td>Blind Count</td><td>Full Audit</td></tr>
-                    <tr><td>Daily Banking Summary</td><td>Hidden</td><td>Exportable</td></tr>
-                  </tbody>
-                </table>
+                <div class="table-scroll" role="region" aria-label="Role permissions table" tabindex="0">
+                  <table class="redacted-table">
+                    <caption class="visually-hidden">Role permissions for checkout, price overrides, returns, shift balancing, and daily banking.</caption>
+                    <thead>
+                      <tr><th scope="col">Operational area</th><th scope="col">Attendant</th><th scope="col">Manager</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th scope="row">Item checkout</th><td>Permitted</td><td>Permitted</td></tr>
+                      <tr><th scope="row">Price override</th><td>Restricted</td><td>Authenticated</td></tr>
+                      <tr><th scope="row">Line void / return</th><td>Restricted</td><td>Logged</td></tr>
+                      <tr><th scope="row">Drawer shift balance</th><td>Blind count</td><td>Full audit</td></tr>
+                      <tr><th scope="row">Daily banking summary</th><td>Hidden</td><td>Exportable</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="table-hint" aria-hidden="true">Scroll sideways to see every role.</p>
               </div>
             </div>
             <p class="band-foot" style="margin-top:.8rem;">Confidential client interfaces and live customer databases are withheld. The operational schematics above show the verified system architecture.</p>
