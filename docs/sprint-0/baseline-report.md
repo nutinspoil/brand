@@ -56,6 +56,32 @@ Headless Chrome was used at 320px, 375px, and 390px CSS widths.
 | Mobile menu at 375px | Pass. Focus moves to Close menu; Tab remains inside; Escape closes and returns focus to Open menu. |
 | Work search at 375px | Pass. Case-insensitive search, combined category filters, live count, empty state, and reset. |
 | Start a Project form at mobile widths | Pass. Fields collapse to one column and validation text is associated with each field. |
+| 200% zoom approximation, 12 major routes | Pass. Emulated 720 CSS px at DPR 2; no horizontal page overflow. |
+| `prefers-reduced-motion: reduce`, 12 major routes | Pass. 0 pending reveal/stamp elements and 0 non-zero animation or transition durations. |
+
+## Morphism consistency pass
+
+A targeted material pass strengthened the existing neumorphic and claymorphic language without changing the palette, radii, or shadow tokens.
+
+- Page plates, panels, cards, pillars, cases, the closing sheet, the evidence note, the mast tile, and the raised index deck now carry a consistent 1px light rim.
+- Recessed panels, cards, pillars, and cases use a quieter dark-surface rim, so an inset well does not read as a flat outline.
+- Dark islands (`panel--ink`, clay-turned-sea panels) use a softer chalk rim instead of the frost-white edge.
+- The Business Systems role table is mounted in a rounded, inset well with a paired dark shade and low light edge.
+- `state--held` is a recessed well with a dashed rim and hollow dot, distinct from raised status keys.
+- Work filter chips are 44px high; text links keep their compact underline while exposing a 44px hit area (28px for links inside running prose).
+
+## Tap-target measurement
+
+Measured at 320px, 375px, and 390px with a union of the element box and its expanded hit area.
+
+| Control | Result |
+|---|---|
+| Primary and secondary buttons | Pass, at least 44px high. |
+| Work filter chips | Pass, 44px high. |
+| Standalone text links | Pass, 44px effective hit height. |
+| Links inside running prose | 28px effective hit height, above the 24px WCAG 2.2 minimum; intentionally smaller to avoid overlapping adjacent lines. |
+| Footer, legal, breadcrumb, and screenshot-caption links | Still below 44px; queued for the formal Sprint 7 tap-target pass. |
+
 
 ## Functional evidence
 
@@ -111,14 +137,14 @@ A consistent 1440×1000 viewport set was captured for the 12 major routes:
 
 These are local review evidence and are not committed to the site.
 
+A second, full-page set in `audit-artifacts/morphism/` records the material pass at 1440px for the homepage, Work, Business Systems, Solutions, About, and Start a Project, plus 390px for the homepage, Work, Business Systems, and Start a Project. These captures use the reduced-motion end state so below-fold content is visible; they are local review evidence.
+
 ## Known baseline gaps
 
 These are not failures of the current implementation; they are checks that still need to be completed before the Sprint 7 / release gate.
 
-- The desktop screenshot set covers the 12 major routes at viewport size; it is not a full-page capture of every route.
-- 200% browser zoom has not yet been formally tested.
-- `prefers-reduced-motion` is implemented in CSS and JS but has not been verified across every route.
-- Tap-target sizing has not been measured formally against a 44×44 CSS px target.
+- The full-page capture set covers six routes at desktop and four at 390px, not every non-redirect route.
+- Formal tap-target fixes remain for footer, legal, breadcrumb, and screenshot-caption links; the primary controls, chips, and standalone text links are measured and passing.
 - Owner factual review is still pending for project statuses, locations, the internal performance claim, contact details, commercial bands, and article dates.
 - Full production-link verification (DNS, TLS, live URLs, WhatsApp handoff on a real device) remains part of the release gate.
 

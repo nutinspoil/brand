@@ -14,6 +14,7 @@ main [id] { scroll-margin-top: 7rem }
   padding: clamp(1.5rem, 3.2vw, 3rem) clamp(1.2rem, 2.8vw, 2.6rem);
   border-radius: var(--r-plate);
   background: linear-gradient(152deg, var(--frost-3) 0%, var(--frost) 42%, var(--frost-2) 100%);
+  border: 1px solid rgba(255, 255, 255, .34);
   box-shadow: var(--plate-hi);
 }
 /* the light sheet: a thinner plate, less lift */
@@ -24,11 +25,13 @@ main [id] { scroll-margin-top: 7rem }
   background:
     radial-gradient(120% 88% at 10% 0%, var(--clay-lit) 0%, rgba(167, 208, 244, 0) 56%),
     linear-gradient(152deg, var(--clay-lit) 0%, var(--clay) 44%, var(--clay-deep) 100%);
+  border-color: rgba(255, 255, 255, .42);
   box-shadow: var(--plate-hi);
 }
 /* sea: the closing plate */
 .stage--console.stage--close .shell {
   background: linear-gradient(152deg, var(--sea) 0%, var(--sea-deep) 100%);
+  border-color: rgba(242, 248, 255, .24);
   box-shadow: var(--plate-hi);
 }
 
@@ -100,6 +103,7 @@ main [id] { scroll-margin-top: 7rem }
   padding: clamp(1.2rem, 2.4vw, 2.1rem) clamp(1.1rem, 2.2vw, 1.9rem);
   border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe 0%, var(--frost) 42%, var(--frost-2) 100%);
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--lift-sm);
 }
 .stage--console.stage--open .mast-lead .lede { color: var(--ink-2) }
@@ -165,6 +169,7 @@ main [id] { scroll-margin-top: 7rem }
    a shade darker than the keys so the keys read as moulded out of it */
 .stage--console.stage--open .index, .stage--console.stage--close .index {
   background: linear-gradient(152deg, var(--frost) 0%, var(--frost-2) 100%);
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--plate);
 }
 .index-head { margin-bottom: .9rem; font: 500 .64rem/1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--fg-3) }
@@ -294,11 +299,12 @@ main [id] { scroll-margin-top: 7rem }
 .panel {
   min-width: 0; padding: clamp(1.3rem, 2.4vw, 2rem); border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--lift-sm);
 }
 /* on a frost plate the neutral panel is cut, not raised */
 .stage--console:not(.stage--open):not(.stage--close) .panel {
-  background: var(--recess); box-shadow: var(--cut);
+  background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut);
 }
 .panel > h3 { margin-top: .7rem }
 .panel-note { font: 500 .64rem/1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--link) }
@@ -308,16 +314,18 @@ main [id] { scroll-margin-top: 7rem }
 /* the sea pill */
 .panel--ink {
   background: linear-gradient(152deg, var(--sea), var(--sea-deep));
+  border-color: rgba(242, 248, 255, .2);
   box-shadow: var(--lift-sea-sm);
 }
 .panel--ink h3 { color: var(--chalk) }
 .panel--ink .panel-copy { color: var(--chalk-2) }
-.stage--console.stage--close .panel--ink { background: var(--recess); box-shadow: var(--cut) }
+.stage--console.stage--close .panel--ink { background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut) }
 /* the turquoise slab: navy ink, never white */
 .panel--clay {
   background:
     radial-gradient(120% 90% at 12% 0%, var(--clay-lit) 0%, rgba(167, 208, 244, 0) 58%),
     linear-gradient(152deg, var(--clay-lit) 0%, var(--clay) 44%, var(--clay-deep) 100%);
+  border-color: rgba(255, 255, 255, .34);
   box-shadow: var(--lift-clay-sm);
 }
 .panel--clay h3 { color: var(--ink) }
@@ -339,6 +347,7 @@ main [id] { scroll-margin-top: 7rem }
 .card {
   min-width: 0; padding: clamp(1.2rem, 2.2vw, 1.7rem); border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--lift-sm);
   transition: transform .18s var(--ease-out), box-shadow .18s;
 }
@@ -352,7 +361,7 @@ main [id] { scroll-margin-top: 7rem }
 }
 .card .panel-copy:first-of-type { margin-top: 1rem }
 .stage--console:not(.stage--open):not(.stage--close) .card {
-  background: var(--recess); box-shadow: var(--cut)
+  background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut)
 }
 .stage--console:not(.stage--open):not(.stage--close) .card:hover { transform: none; box-shadow: var(--cut), inset 0 0 0 1px var(--hair-2) }
 @media (min-width: 901px) { .rank { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)) } }
@@ -362,12 +371,13 @@ main [id] { scroll-margin-top: 7rem }
 .pillar {
   min-width: 0; padding: clamp(1.1rem, 2vw, 1.5rem); border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--lift-sm);
 }
 .stage--console:not(.stage--open):not(.stage--close) .pillar {
-  background: var(--recess); box-shadow: var(--cut)
+  background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut)
 }
-.stage--console.stage--close .pillar { background: var(--recess); box-shadow: var(--cut) }
+.stage--console.stage--close .pillar { background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut) }
 .pillar-no {
   display: block; font: 800 clamp(1.9rem, 3.4vw, 2.6rem)/1 var(--f-label); letter-spacing: -.05em; color: var(--ink-sea);
 }
@@ -472,9 +482,10 @@ main [id] { scroll-margin-top: 7rem }
   display: grid; gap: clamp(1.2rem, 2.4vw, 2rem); align-items: start;
   padding: clamp(1.3rem, 2.4vw, 2rem); border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe, var(--frost) 42%, var(--frost-2));
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--lift-sm);
 }
-.stage--console:not(.stage--open):not(.stage--close) .case { background: var(--recess); box-shadow: var(--cut) }
+.stage--console:not(.stage--open):not(.stage--close) .case { background: var(--recess); border-color: rgba(242, 248, 255, .14); box-shadow: var(--cut) }
 .case-media { min-width: 0; display: grid }
 .case-body { min-width: 0; display: grid; gap: .8rem; align-content: start }
 .case-body h3 { font-size: clamp(1.16rem, 1.9vw, 1.5rem) }
@@ -551,7 +562,8 @@ main [id] { scroll-margin-top: 7rem }
 }
 .chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.4rem }
 .chip {
-  min-height: 42px; padding: .6rem 1.05rem; cursor: pointer; border-radius: var(--r-pill);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: .6rem 1.05rem; cursor: pointer; border-radius: var(--r-pill);
   border: 1px solid transparent; background: var(--neu-face); box-shadow: var(--key);
   font: 600 .74rem/1 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-2);
   transition: color .16s, transform .16s var(--ease-out), box-shadow .16s;
@@ -635,6 +647,7 @@ main [id] { scroll-margin-top: 7rem }
   min-width: 0; display: grid; align-content: center; gap: .9rem;
   padding: clamp(1.4rem, 2.8vw, 2.4rem) clamp(1.2rem, 2.4vw, 2rem); border-radius: var(--r-card);
   background: linear-gradient(152deg, #fdfefe, var(--frost) 40%, var(--frost-2));
+  border: 1px solid rgba(255, 255, 255, .5);
   box-shadow: var(--plate);
 }
 .closing-main h2 { max-width: 22ch }
@@ -863,7 +876,7 @@ main [id] { scroll-margin-top: 7rem }
   margin-top: clamp(1.4rem, 2.4vw, 2rem);
   padding: clamp(.9rem, 1.6vw, 1.2rem) clamp(1rem, 1.8vw, 1.4rem);
   border-radius: var(--r-tile);
-  background: var(--frost); box-shadow: var(--lift-sm);
+  background: var(--frost); border: 1px solid rgba(255, 255, 255, .5); box-shadow: var(--lift-sm);
   font: 400 .82rem/1.6 var(--f-mono); color: var(--fg-2);
   max-width: 84ch;
 }
@@ -1018,7 +1031,14 @@ a.work-card-media, a.work-featured-media { display: block; color: inherit; text-
 }
 
 /* Redacted Schema Fragment */
-.table-scroll { position: relative; z-index: 1; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch }
+.table-scroll {
+  position: relative; z-index: 1; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: .35rem .45rem;
+  border-radius: var(--r-tile);
+  background: rgba(2, 20, 34, .42);
+  border: 1px solid rgba(255, 255, 255, .07);
+  box-shadow: inset 3px 4px 9px rgba(0, 0, 0, .45), inset -2px -2px 6px rgba(255, 255, 255, .06);
+}
 .table-scroll:focus-visible { outline: 3px solid var(--mint-hi); outline-offset: 4px }
 .table-hint { display: none; margin-top: .55rem; font: 500 .72rem/1.4 var(--f-label); letter-spacing: .04em; color: var(--mint-hi) }
 @media (max-width: 600px) { .table-hint { display: block } }
