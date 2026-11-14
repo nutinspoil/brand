@@ -7,6 +7,8 @@
    shadow bottom-right; pressed, the pair flips inside-out and it sinks.
    Ink is navy. White never sits on the ground or on clay — it belongs only to the sea. */
 
+@import url("../fonts/fonts.css");
+
 :root {
   /* the ground: powder blue, one light source */
   --ground: #7fa9d6;
@@ -38,8 +40,8 @@
   /* navy ink — the only ink the ground and the clay will carry */
   --ink: #06283f;           /* primary ink on light blue surfaces */
   --ink-2: #0e3a58;         /* secondary ink on light blue surfaces */
-  --ink-3: #164669;         /* 9.55 frost-3 — frost plates only, never the ground */
-  --ink-sea: #0a5f92;       /* 5.63 frost — the link on frost */
+  --ink-3: #0f3d5e;         /* 4.62 ground · 10.62 frost — quiet ink that still passes on powder */
+  --ink-sea: #073f60;       /* 4.53 ground · 10.40 frost — link ink that holds on the ground */
   --ink-mint: #2d679b;      /* blue tick on frost */
 
   /* error: the one non-blue ink, reserved for field validation */

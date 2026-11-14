@@ -2,6 +2,7 @@
    Menu, nav dropdowns, header fold, routing and stamp reveal, filters, enquiry slip. */
 (() => {
   const root = document.documentElement;
+  root.classList.add('js');
   const header = document.querySelector('.site-header');
   const menu = document.querySelector('.mobile-nav');
   const openButton = document.querySelector('[data-menu-open]');
@@ -149,6 +150,63 @@
     }
   }
 
+  // Editorial sections settle in as they arrive; nothing is hidden without JS.
+  const settle = [...document.querySelectorAll('[data-reveal], .reveal')];
+  if (settle.length) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches || !('IntersectionObserver' in window)) {
+      settle.forEach(element => element.classList.add('is-in'));
+    } else {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+      settle.forEach(element => observer.observe(element));
+    }
+  }
+
+  // The homepage showcase: manual scenes, never autoplaying.
+  document.querySelectorAll('[data-showcase]').forEach(stage => {
+    const slides = [...stage.querySelectorAll('[data-slide]')];
+    const buttons = [...stage.querySelectorAll('[data-slide-to]')];
+    const caption = stage.querySelector('[data-caption]');
+    const captionLink = stage.querySelector('[data-caption-link]');
+    const count = stage.querySelector('[data-count]');
+    if (!slides.length || !buttons.length) return;
+
+    function show(index, moveFocus) {
+      const button = buttons[index];
+      if (!button) return;
+      slides.forEach((slide, n) => {
+        slide.dataset.active = String(n === index);
+        slide.setAttribute('aria-hidden', String(n !== index));
+      });
+      buttons.forEach((item, n) => item.setAttribute('aria-pressed', String(n === index)));
+      if (caption && button.dataset.caption) caption.textContent = button.dataset.caption;
+      if (captionLink && button.dataset.href) {
+        captionLink.href = button.dataset.href;
+        const label = button.dataset.link || 'Read the case study';
+        const text = [...captionLink.childNodes].find(node => node.nodeType === 3 && node.textContent.trim());
+        if (text) text.textContent = `${label} `;
+        else captionLink.insertBefore(document.createTextNode(`${label} `), captionLink.firstChild);
+      }
+      if (count) count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(buttons.length).padStart(2, '0')}`;
+      if (moveFocus) button.focus();
+    }
+
+    buttons.forEach((button, index) => button.addEventListener('click', () => show(index)));
+    stage.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+      if (!buttons.includes(document.activeElement)) return;
+      event.preventDefault();
+      const current = buttons.findIndex(button => button.getAttribute('aria-pressed') === 'true');
+      show((current + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length, true);
+    });
+  });
+
   // The index deck: the readout mirrors whichever key is held.
   document.querySelectorAll('[data-deck]').forEach(deck => {
     const keys = [...deck.querySelectorAll('.index-key')];
@@ -199,8 +257,8 @@
     if (!visible) {
       const chosen = group.querySelector(`[data-filter="${choice}"]`)?.textContent.trim();
       emptyMessage = query
-        ? `No projects match “${raw}”${choice !== 'all' ? ` in ${chosen}` : ''}. Try another term or reset the filters.`
-        : `No projects match ${chosen}. Choose “All work” or reset the filters.`;
+        ? `No projects match "${raw}". Try another search or reset the filters.`
+        : `No projects match ${chosen}. Try another search or reset the filters.`;
     }
     if (empty) {
       empty.hidden = visible > 0;
