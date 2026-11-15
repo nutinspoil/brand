@@ -1,1 +1,5 @@
-audit-artifacts/
+node_modules/
+.DS_Store
+.vercel/
+qa-artifacts/
+.generated-manifest.json

@@ -1,433 +1,483 @@
-/* SUCCESS ABOVE DREAMS — document behaviour.
-   Menu, nav dropdowns, header fold, routing and stamp reveal, filters, enquiry slip. */
 (() => {
-  const root = document.documentElement;
-  root.classList.add('js');
-  const header = document.querySelector('.site-header');
-  const menu = document.querySelector('.mobile-nav');
-  const openButton = document.querySelector('[data-menu-open]');
-  const closeButton = document.querySelector('[data-menu-close]');
-  const headerBrand = document.querySelector('.letterhead .brand');
-  const background = [header, ...document.querySelectorAll('main, footer')].filter(element => element && !menu?.contains(element));
-  const dropdowns = [...document.querySelectorAll('details.nav-drop')];
-  const previousInert = new Map();
-  let menuFocusFrame = null;
-  let previousOverflow = '';
-  const DESKTOP = 1180;
+  const doc = document;
+  const body = doc.body;
 
-  function menuItems() {
-    return [...menu.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')]
-      .filter(item => item.tabIndex >= 0 && !item.matches(':disabled') &&
-        !item.closest('[hidden], [inert]') && item.getClientRects().length > 0 &&
-        window.getComputedStyle(item).visibility !== 'hidden');
+  function initHeader() {
+    const header = doc.querySelector('[data-header]');
+    if (!header) return;
+    const setState = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+    setState();
+    window.addEventListener('scroll', setState, { passive: true });
   }
 
-  function closeMenu() {
-    if (!menu?.classList.contains('is-open')) return;
-    window.cancelAnimationFrame(menuFocusFrame);
-    menuFocusFrame = null;
-    root.classList.remove('menu-open');
-    document.body.style.overflow = previousOverflow;
-    openButton?.setAttribute('aria-expanded', 'false');
-    previousInert.forEach((wasInert, element) => element.toggleAttribute('inert', wasInert));
-    previousInert.clear();
-    (window.innerWidth > DESKTOP ? headerBrand : openButton)?.focus({ preventScroll: true });
-    menu.classList.remove('is-open');
-    menu.setAttribute('aria-hidden', 'true');
-    menu.setAttribute('inert', '');
-  }
+  function initDisclosures() {
+    const drops = [...doc.querySelectorAll('[data-nav-drop]')];
+    if (!drops.length) return;
 
-  function openMenu() {
-    if (!menu || window.innerWidth > DESKTOP || menu.classList.contains('is-open')) return;
-    dropdowns.forEach(dropdown => { dropdown.open = false; });
-    previousOverflow = document.body.style.overflow;
-    menu.removeAttribute('inert');
-    menu.setAttribute('tabindex', '-1');
-    menu.classList.add('is-open');
-    menu.setAttribute('aria-hidden', 'false');
-    root.classList.add('menu-open');
-    document.body.style.overflow = 'hidden';
-    openButton?.setAttribute('aria-expanded', 'true');
-    background.forEach(element => {
-      previousInert.set(element, element.hasAttribute('inert'));
-      element.setAttribute('inert', '');
-    });
-    menu.focus({ preventScroll: true });
-    menuFocusFrame = window.requestAnimationFrame(() => {
-      menuFocusFrame = null;
-      if (!menu.classList.contains('is-open')) return;
-      if (window.innerWidth > DESKTOP) return closeMenu();
-      const items = menuItems();
-      (items.includes(closeButton) ? closeButton : items[0] || menu).focus({ preventScroll: true });
-    });
-    window.setTimeout(() => {
-      if (!menu.classList.contains('is-open')) return;
-      const active = document.activeElement;
-      if (active !== menu && active !== openButton && active !== document.body) return;
-      const items = menuItems();
-      (items.includes(closeButton) ? closeButton : items[0] || menu).focus({ preventScroll: true });
-    }, 280);
-  }
-
-  if (menu && !menu.classList.contains('is-open')) menu.setAttribute('inert', '');
-  openButton?.addEventListener('click', openMenu);
-  closeButton?.addEventListener('click', closeMenu);
-  menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-
-  document.addEventListener('keydown', event => {
-    if (!menu?.classList.contains('is-open')) return;
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      closeMenu();
-      return;
-    }
-    if (event.key !== 'Tab') return;
-    const items = menuItems();
-    if (!items.length) {
-      event.preventDefault();
-      menu.focus();
-    } else if (!items.includes(document.activeElement)) {
-      event.preventDefault();
-      (event.shiftKey ? items.at(-1) : items[0]).focus();
-    } else if (event.shiftKey && document.activeElement === items[0]) {
-      event.preventDefault();
-      items.at(-1).focus();
-    } else if (!event.shiftKey && document.activeElement === items.at(-1)) {
-      event.preventDefault();
-      items[0].focus();
-    }
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > DESKTOP) closeMenu();
-    else dropdowns.forEach(dropdown => { dropdown.open = false; });
-  });
-
-  dropdowns.forEach(dropdown => dropdown.addEventListener('toggle', () => {
-    if (!dropdown.open) return;
-    dropdowns.forEach(other => { if (other !== dropdown) other.open = false; });
-  }));
-  document.addEventListener('click', event => {
-    dropdowns.forEach(dropdown => { if (!dropdown.contains(event.target)) dropdown.open = false; });
-  });
-  document.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || menu?.classList.contains('is-open')) return;
-    const dropdown = dropdowns.find(item => item.open);
-    if (!dropdown) return;
-    event.preventDefault();
-    dropdown.open = false;
-    dropdown.querySelector('summary')?.focus({ preventScroll: true });
-  });
-
-  // The running head folds away once the note itself is on screen.
-  if (header) {
-    let pinned = false;
-    function setPinned() {
-      const next = window.scrollY > 56;
-      if (next === pinned) return;
-      pinned = next;
-      header.classList.toggle('is-pinned', pinned);
-    }
-    setPinned();
-    window.addEventListener('scroll', setPinned, { passive: true });
-  }
-
-  // One authored sequence: the routing line is drawn, then each stamp settles.
-  const reveal = [...document.querySelectorAll('[data-route], [data-stamp]')];
-  if (reveal.length) {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduce.matches || !('IntersectionObserver' in window)) {
-      reveal.forEach(element => element.classList.add('is-drawn', 'is-stamped'));
-    } else {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add(entry.target.hasAttribute('data-route') ? 'is-drawn' : 'is-stamped');
-          observer.unobserve(entry.target);
-        });
-      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.2 });
-      reveal.forEach(element => observer.observe(element));
-    }
-  }
-
-  // Editorial sections settle in as they arrive; nothing is hidden without JS.
-  const settle = [...document.querySelectorAll('[data-reveal], .reveal')];
-  if (settle.length) {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduce.matches || !('IntersectionObserver' in window)) {
-      settle.forEach(element => element.classList.add('is-in'));
-    } else {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-in');
-          observer.unobserve(entry.target);
-        });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
-      settle.forEach(element => observer.observe(element));
-    }
-  }
-
-  // The homepage showcase: manual scenes, never autoplaying.
-  document.querySelectorAll('[data-showcase]').forEach(stage => {
-    const slides = [...stage.querySelectorAll('[data-slide]')];
-    const buttons = [...stage.querySelectorAll('[data-slide-to]')];
-    const caption = stage.querySelector('[data-caption]');
-    const captionLink = stage.querySelector('[data-caption-link]');
-    const count = stage.querySelector('[data-count]');
-    if (!slides.length || !buttons.length) return;
-
-    function show(index, moveFocus) {
-      const button = buttons[index];
-      if (!button) return;
-      slides.forEach((slide, n) => {
-        slide.dataset.active = String(n === index);
-        slide.setAttribute('aria-hidden', String(n !== index));
+    const closeAll = except => {
+      drops.forEach(drop => {
+        if (drop !== except) drop.open = false;
       });
-      buttons.forEach((item, n) => item.setAttribute('aria-pressed', String(n === index)));
-      if (caption && button.dataset.caption) caption.textContent = button.dataset.caption;
-      if (captionLink && button.dataset.href) {
-        captionLink.href = button.dataset.href;
-        const label = button.dataset.link || 'Read the case study';
-        const text = [...captionLink.childNodes].find(node => node.nodeType === 3 && node.textContent.trim());
-        if (text) text.textContent = `${label} `;
-        else captionLink.insertBefore(document.createTextNode(`${label} `), captionLink.firstChild);
-      }
-      if (count) count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(buttons.length).padStart(2, '0')}`;
-      if (moveFocus) button.focus();
-    }
+    };
 
-    buttons.forEach((button, index) => button.addEventListener('click', () => show(index)));
-    stage.addEventListener('keydown', event => {
-      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-      if (!buttons.includes(document.activeElement)) return;
-      event.preventDefault();
-      const current = buttons.findIndex(button => button.getAttribute('aria-pressed') === 'true');
-      show((current + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length, true);
+    drops.forEach(drop => {
+      drop.addEventListener('toggle', () => {
+        if (drop.open) closeAll(drop);
+      });
+      drop.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          drop.open = false;
+          drop.querySelector('summary')?.focus();
+        }
+      });
     });
-  });
 
-  // The index deck: the readout mirrors whichever key is held.
-  document.querySelectorAll('[data-deck]').forEach(deck => {
-    const keys = [...deck.querySelectorAll('.index-key')];
-    const out = deck.querySelector('[data-deck-read]');
-    const fill = deck.querySelector('.index-bar i');
-    if (!keys.length) return;
-
-    function show(index) {
-      const key = keys[index];
-      if (!key) return;
-      keys.forEach((item, n) => item.classList.toggle('is-held', n === index));
-      const note = key.querySelector('.index-note')?.textContent;
-      if (out && note) out.textContent = note;
-      if (fill) fill.style.setProperty('--pos', `${Math.round(((index + 1) / keys.length) * 100)}%`);
-    }
-
-    keys.forEach((key, index) => {
-      key.addEventListener('pointerenter', () => show(index));
-      key.addEventListener('focus', () => show(index));
+    doc.addEventListener('click', event => {
+      if (!event.target.closest('[data-nav-drop]')) closeAll();
     });
-    show(0);
-  });
 
-  // Category filters and search on the index pages.
-  const filterGroups = [...document.querySelectorAll('[data-filter-group]:not([data-filter-item]):not([data-filter])')];
-  function refreshGroup(group) {
-    const key = group.dataset.filterGroup;
-    const choice = group.dataset.activeFilter || 'all';
-    const input = document.querySelector(`[data-search="${key}"]`);
-    const raw = input?.value.trim() || '';
-    const query = raw.toLowerCase();
-    const items = [...document.querySelectorAll(`[data-filter-item][data-filter-group="${key}"]`)];
-    items.forEach(item => {
-      const catAttr = item.dataset.category || '';
-      const catList = catAttr.split(/\s+/).filter(Boolean);
-      const matchesCategory = choice === 'all' || catAttr === choice || catList.includes(choice);
-      const matchesSearch = !query || item.textContent.toLowerCase().includes(query);
-      item.hidden = !(matchesCategory && matchesSearch);
+    doc.addEventListener('focusin', event => {
+      const active = event.target.closest('[data-nav-drop]');
+      if (active) closeAll(active);
     });
-    const visible = items.filter(item => !item.hidden).length;
-    const countText = `Showing ${visible} of ${items.length} project${items.length === 1 ? '' : 's'}`;
-    const count = document.querySelector(`[data-filter-count="${key}"]`);
-    if (count) count.textContent = countText;
-    const reset = document.querySelector(`[data-filter-reset="${key}"]`);
-    if (reset) reset.hidden = choice === 'all' && !query;
-    const empty = document.querySelector(`[data-empty-search="${key}"]`);
-    let emptyMessage = '';
-    if (!visible) {
-      const chosen = group.querySelector(`[data-filter="${choice}"]`)?.textContent.trim();
-      emptyMessage = query
-        ? `No projects match "${raw}". Try another search or reset the filters.`
-        : `No projects match ${chosen}. Try another search or reset the filters.`;
-    }
-    if (empty) {
-      empty.hidden = visible > 0;
-      if (emptyMessage) empty.textContent = emptyMessage;
-    }
-    // One live message carries both the result count and the recovery guidance.
-    const announcer = document.querySelector(`[data-filter-announcer="${key}"]`);
-    if (announcer) announcer.textContent = emptyMessage ? `${countText}. ${emptyMessage}` : countText;
-  }
-  filterGroups.forEach(group => {
-    group.dataset.activeFilter = 'all';
-    group.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
-      group.dataset.activeFilter = button.dataset.filter;
-      group.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-      refreshGroup(group);
-    }));
-    const key = group.dataset.filterGroup;
-    document.querySelector(`[data-filter-reset="${key}"]`)?.addEventListener('click', () => {
-      const input = document.querySelector(`[data-search="${key}"]`);
-      if (input) input.value = '';
-      group.dataset.activeFilter = 'all';
-      group.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item.dataset.filter === 'all')));
-      refreshGroup(group);
-      input?.focus();
-    });
-  });
-  document.querySelectorAll('[data-search]').forEach(input => input.addEventListener('input', () => {
-    const group = filterGroups.find(item => item.dataset.filterGroup === input.dataset.search);
-    if (group) refreshGroup(group);
-  }));
-
-  // The enquiry terminal: a live transcript, then a WhatsApp draft the visitor sends themselves.
-  const REQUIRED = ['name', 'contact', 'category', 'idea'];
-
-  function fieldError(field) {
-    return field.id ? document.getElementById(`${field.id}-error`) : null;
   }
 
-  function setFieldError(field, invalid) {
-    if (invalid) field.setAttribute('aria-invalid', 'true');
-    else field.removeAttribute('aria-invalid');
-    const error = fieldError(field);
-    if (error) error.hidden = !invalid;
-  }
+  function initMenu() {
+    const drawer = doc.querySelector('[data-menu]');
+    const openButton = doc.querySelector('[data-menu-open]');
+    const closeButton = doc.querySelector('[data-menu-close]');
+    if (!drawer || !openButton) return;
 
-  function validateEnquiry(form) {
-    let firstInvalid = null;
-    REQUIRED.forEach(key => {
-      const field = form.elements.namedItem(key);
-      if (!field) return;
-      const empty = !String(field.value || '').trim();
-      setFieldError(field, empty);
-      if (empty && !firstInvalid) firstInvalid = field;
+    let returnFocus = null;
+
+    const focusables = () =>
+      [...drawer.querySelectorAll('a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])')].filter(
+        element => element.offsetParent !== null
+      );
+
+    const open = () => {
+      returnFocus = doc.activeElement;
+      drawer.removeAttribute('inert');
+      drawer.setAttribute('aria-hidden', 'false');
+      drawer.setAttribute('data-open', '');
+      openButton.setAttribute('aria-expanded', 'true');
+      body.classList.add('menu-open');
+      // force the visibility change to apply before moving focus into the drawer
+      void drawer.offsetWidth;
+      (closeButton || focusables()[0])?.focus();
+    };
+
+    const close = ({ restore = true } = {}) => {
+      drawer.removeAttribute('data-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.setAttribute('inert', '');
+      openButton.setAttribute('aria-expanded', 'false');
+      body.classList.remove('menu-open');
+      if (restore && returnFocus) returnFocus.focus();
+    };
+
+    openButton.addEventListener('click', open);
+    closeButton?.addEventListener('click', () => close());
+
+    drawer.addEventListener('click', event => {
+      if (event.target === drawer) close();
+      if (event.target.closest('a')) close({ restore: false });
     });
-    const consent = form.elements.namedItem('consent');
-    if (consent) {
-      const unchecked = !consent.checked;
-      setFieldError(consent, unchecked);
-      if (unchecked && !firstInvalid) firstInvalid = consent;
-    }
-    return firstInvalid;
-  }
 
-  function noteLines(values) {
-    const lines = [
-      'Hello Emmanuel, I would like to start a conversation with Success Above Dreams.',
-      '',
-      `Name: ${values.get('name') || '-'}`,
-      `Organisation or project: ${values.get('organisation') || values.get('business') || 'Not provided'}`,
-      `Email or WhatsApp: ${values.get('contact') || values.get('phone') || values.get('email') || 'Not provided'}`,
-      `Category: ${values.get('category') || '-'}`,
-      '',
-      'What are you trying to make possible?:',
-      values.get('idea') || values.get('brief') || '-',
-      '',
-      `Who needs to use it?: ${values.get('audience') || 'Not provided'}`,
-      `What would a useful first version do?: ${values.get('future') || values.get('possible') || 'Not provided'}`
-    ];
-
-    const timing = values.get('timing') || values.get('timeline');
-    const budget = values.get('budget');
-    if (timing) lines.push(`Expected timing: ${timing}`);
-    if (budget) lines.push(`Budget, if known: ${budget}`);
-
-    return lines.join('\n');
-  }
-
-  document.querySelectorAll('[data-whatsapp-form]').forEach(form => {
-    const slip = document.querySelector('[data-draft]');
-    const state = document.querySelector('[data-draft-state]');
-
-    function preview() {
-      if (!slip) return;
-      const values = new FormData(form);
-      const filled = REQUIRED.filter(key => String(values.get(key) || '').trim());
-      slip.replaceChildren();
-      if (!filled.length) {
-        const hint = document.createElement('span');
-        hint.className = 'transcript-empty';
-        hint.textContent = 'Fill the form and the message appears here, exactly as WhatsApp will receive it.';
-        slip.append(hint);
-        if (state) state.textContent = 'Nothing drafted yet';
+    doc.addEventListener('keydown', event => {
+      if (!drawer.hasAttribute('data-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        close();
         return;
       }
-      slip.textContent = noteLines(values);
-      if (state) state.textContent = filled.length === REQUIRED.length
-        ? 'Ready to review'
-        : `Incomplete · ${filled.length} of ${REQUIRED.length} essentials filled`;
-    }
+      if (event.key !== 'Tab') return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && doc.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && doc.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
 
-    form.querySelectorAll('input, select, textarea').forEach(field => {
-      field.addEventListener('input', () => {
-        if (REQUIRED.includes(field.name) && String(field.value).trim()) setFieldError(field, false);
-        if (field.name === 'consent' && field.checked) setFieldError(field, false);
-        preview();
-      });
-      field.addEventListener('change', () => {
-        if (REQUIRED.includes(field.name) && String(field.value).trim()) setFieldError(field, false);
-        if (field.name === 'consent' && field.checked) setFieldError(field, false);
-        preview();
+  function initScrollRegions() {
+    doc.querySelectorAll('.table-wrap').forEach(wrap => {
+      const sync = () => {
+        if (wrap.scrollWidth > wrap.clientWidth) wrap.setAttribute('tabindex', '0');
+        else wrap.removeAttribute('tabindex');
+      };
+      sync();
+      window.addEventListener('resize', sync, { passive: true });
+    });
+  }
+
+  function initPicker() {
+    doc.querySelectorAll('[data-picker]').forEach(picker => {
+      const buttons = [...picker.querySelectorAll('[data-pick]')];
+      const panels = [...picker.querySelectorAll('[data-panel]')];
+      const status = picker.querySelector('[data-picker-status]');
+      if (!buttons.length) return;
+
+      const select = (id, { focus = false } = {}) => {
+        let selected = null;
+        buttons.forEach(button => {
+          const active = button.dataset.pick === id;
+          button.setAttribute('aria-pressed', String(active));
+          if (active) selected = button;
+        });
+        panels.forEach(panel => {
+          if (panel.dataset.panel === id) panel.setAttribute('data-active', 'true');
+          else panel.removeAttribute('data-active');
+        });
+        if (status && selected) status.textContent = `Showing ${selected.textContent.trim()}.`;
+        if (focus) selected?.focus();
+      };
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => select(button.dataset.pick));
+        button.addEventListener('keydown', event => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          const index = buttons.indexOf(button);
+          let next = index;
+          if (event.key === 'ArrowLeft') next = (index - 1 + buttons.length) % buttons.length;
+          if (event.key === 'ArrowRight') next = (index + 1) % buttons.length;
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = buttons.length - 1;
+          select(buttons[next].dataset.pick, { focus: true });
+        });
       });
     });
-    preview();
+  }
+
+  function initReveals() {
+    const targets = [
+      ...doc.querySelectorAll(
+        '.band .section-head, .feature-proof, .picker, .rows__item, .routes__item, .founder__portrait, .founder__copy, .stage-strip, .practice-grid, .comparison, .proof-strip, .work-list, .cta-panel, .ethics, .service-block'
+      )
+    ];
+    if (!targets.length) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) return;
+
+    targets.forEach((target, index) => {
+      target.classList.add('reveal');
+      if (target.matches('.rows__item, .routes__item')) {
+        target.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 55}ms`);
+      }
+    });
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+    );
+
+    targets.forEach(target => observer.observe(target));
+
+    window.setTimeout(() => {
+      targets.forEach(target => target.classList.add('is-in'));
+    }, 2400);
+  }
+
+  function initWork() {
+    const root = doc.querySelector('[data-work]');
+    if (!root) return;
+    const form = doc.querySelector('[data-work-search]');
+    const input = doc.querySelector('[data-work-input]');
+    const count = doc.querySelector('[data-work-count]');
+    const empty = doc.querySelector('[data-work-empty]');
+    const filters = [...doc.querySelectorAll('[data-filter]')];
+    const resets = [...doc.querySelectorAll('[data-work-reset]')];
+    const items = [...root.querySelectorAll('[data-work-item]')];
+    const groups = [...root.querySelectorAll('[data-work-group]')];
+    if (!input || !items.length) return;
+
+    const normalise = value =>
+      value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+    let group = 'all';
+    let announceTimer = 0;
+
+    const apply = ({ announce = true } = {}) => {
+      const tokens = normalise(input.value).split(/\s+/).filter(Boolean);
+      let visible = 0;
+
+      items.forEach(item => {
+        const haystack = normalise(`${item.dataset.search || ''} ${item.textContent}`);
+        const matchesQuery = tokens.every(token => haystack.includes(token));
+        const matchesGroup = group === 'all' || item.dataset.group === group;
+        const show = matchesQuery && matchesGroup;
+        item.hidden = !show;
+        if (show) visible += 1;
+      });
+
+      groups.forEach(section => {
+        const hasVisible = [...section.querySelectorAll('[data-work-item]')].some(item => !item.hidden);
+        section.hidden = !hasVisible;
+      });
+
+      if (empty) empty.hidden = visible !== 0;
+      resets.forEach(reset => {
+        reset.hidden = group === 'all' && input.value.trim() === '';
+      });
+
+      if (count) {
+        const total = items.length;
+        const text =
+          visible === 0
+            ? 'No projects match'
+            : group === 'all' && tokens.length === 0
+              ? `${visible} ${visible === 1 ? 'project' : 'projects'}`
+              : `${visible} of ${total} projects shown`;
+        if (announce) {
+          window.clearTimeout(announceTimer);
+          announceTimer = window.setTimeout(() => {
+            count.textContent = text;
+          }, 220);
+        } else {
+          count.textContent = text;
+        }
+      }
+    };
+
+    filters.forEach(button => {
+      button.addEventListener('click', () => {
+        group = button.dataset.filter;
+        filters.forEach(filter => filter.setAttribute('aria-pressed', String(filter === button)));
+        apply();
+      });
+    });
+
+    input.addEventListener('input', () => apply());
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && input.value) {
+        input.value = '';
+        apply();
+      }
+    });
+
+    form?.addEventListener('submit', event => {
+      event.preventDefault();
+      apply();
+    });
+
+    resets.forEach(reset => {
+      reset.addEventListener('click', () => {
+        input.value = '';
+        group = 'all';
+        filters.forEach(filter => filter.setAttribute('aria-pressed', String(filter.dataset.filter === 'all')));
+        apply();
+        input.focus();
+      });
+    });
+
+    apply({ announce: false });
+  }
+
+  function initIntake() {
+    const form = doc.querySelector('[data-intake-form]');
+    if (!form) return;
+
+    const prefillNode = doc.getElementById('intake-prefills');
+    let prefills = {};
+    try {
+      prefills = prefillNode ? JSON.parse(prefillNode.textContent) : {};
+    } catch (error) {
+      prefills = {};
+    }
+
+    const field = name => form.elements.namedItem(name);
+    const nameField = field('name');
+    const contactField = field('contact');
+    const briefField = field('brief');
+    const situationField = field('situation');
+    const consentField = field('consent');
+    const required = [
+      [nameField, 'name'],
+      [contactField, 'contact'],
+      [briefField, 'brief']
+    ];
+    const optional = ['organisation', 'situation', 'firstVersion', 'timing', 'budget'].map(field);
+
+    const state = doc.querySelector('[data-transcript-state]');
+    const transcript = doc.querySelector('[data-transcript-body]');
+    const emptyCopy = transcript ? transcript.textContent : '';
+    const preparedSection = doc.querySelector('[data-prepared]');
+    const preparedPanel = doc.querySelector('[data-prepared-panel]');
+    const preparedLink = doc.querySelector('[data-prepared-link]');
+    const preparedReset = doc.querySelector('[data-prepared-reset]');
+
+    const valueOf = element => (element ? String(element.value || '').trim() : '');
+
+    const message = () => {
+      const lines = [];
+      const name = valueOf(nameField);
+      const contact = valueOf(contactField);
+      const brief = valueOf(briefField);
+
+      lines.push('Hello Emmanuel,');
+      lines.push('');
+      if (name) lines.push(`My name is ${name}.`);
+      if (contact) lines.push(`You can reply to me at ${contact}.`);
+      if (name || contact) lines.push('');
+      if (brief) lines.push('What I am trying to build or improve:', brief);
+      optional.forEach(element => {
+        if (!element) return;
+        const value = valueOf(element);
+        if (!value || value === 'Not decided') return;
+        const label = element.closest('.field')?.querySelector('label')?.childNodes[0]?.textContent?.trim();
+        if (!label) return;
+        lines.push('', `${label}:`, value);
+      });
+      lines.push('', 'Sent from the project brief on successabovedreams.vercel.app.');
+      return lines.join('\n');
+    };
+
+    const setState = text => {
+      if (!state) return;
+      state.textContent = text;
+      state.dataset.state = text === 'Ready to review' ? 'ready' : '';
+    };
+
+    const updateTranscript = () => {
+      if (!transcript) return;
+      const hasRequired = required.every(([element]) => valueOf(element));
+      transcript.textContent = hasRequired ? message() : emptyCopy;
+      setState(hasRequired ? 'Ready to review' : 'Incomplete');
+      if (preparedSection && !preparedSection.hidden) {
+        preparedSection.hidden = true;
+      }
+    };
+
+    const clearError = name => {
+      const error = form.querySelector(`[data-error-for="${name}"]`);
+      const control = field(name);
+      if (error) error.hidden = true;
+      if (control && control.getAttribute('aria-invalid')) control.removeAttribute('aria-invalid');
+    };
+
+    const showError = (name, focus = false) => {
+      const error = form.querySelector(`[data-error-for="${name}"]`);
+      const control = field(name);
+      if (error) error.hidden = false;
+      if (control) {
+        control.setAttribute('aria-invalid', 'true');
+        if (focus) control.focus();
+      }
+    };
+
+    const validate = () => {
+      let firstInvalid = null;
+      required.forEach(([element, name]) => {
+        if (!valueOf(element)) {
+          firstInvalid = firstInvalid || element;
+          showError(name);
+        } else {
+          clearError(name);
+        }
+      });
+      if (consentField && !consentField.checked) {
+        showError('consent');
+        firstInvalid = firstInvalid || consentField;
+      } else {
+        clearError('consent');
+      }
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return false;
+      }
+      return true;
+    };
+
+    form.addEventListener('input', event => {
+      const name = event.target?.name;
+      if (name) clearError(name);
+      updateTranscript();
+    });
+
+    form.addEventListener('change', event => {
+      const name = event.target?.name;
+      if (name) clearError(name);
+      updateTranscript();
+    });
 
     form.addEventListener('submit', event => {
       event.preventDefault();
-      const firstInvalid = validateEnquiry(form);
-      const status = form.querySelector('[data-form-status]');
-      if (firstInvalid) {
-        firstInvalid.focus();
-        if (status) status.textContent = 'Add the missing details marked above, then prepare the message.';
-        return;
+      if (!validate()) return;
+
+      if (preparedLink) {
+        const number = prefills.whatsapp || '233543671806';
+        preparedLink.href = `https://wa.me/${number}?text=${encodeURIComponent(message())}`;
       }
-      preview();
-      const url = `https://wa.me/233543671806?text=${encodeURIComponent(noteLines(new FormData(form)))}`;
-      const draft = window.open(url, '_blank');
-      if (draft) draft.opener = null;
-      if (state) state.textContent = 'Message prepared';
-      if (status) status.textContent = draft
-        ? 'WhatsApp opened with your draft. Read it, change anything you like, then press Send.'
-        : 'Your browser blocked the WhatsApp tab. Allow pop-ups for this site, or use the direct link beside the button.';
+      if (transcript) transcript.textContent = message();
+      setState('Message prepared');
+      if (preparedSection) {
+        preparedSection.hidden = false;
+        preparedPanel?.focus();
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        preparedSection.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
+      }
     });
-  });
 
-  // Keep deep links clear of the folding header once fonts settle.
-  const hashTarget = location.hash.length > 1
-    ? document.getElementById(decodeURIComponent(location.hash.slice(1)))
-    : null;
-  if (hashTarget) {
-    const realign = () => {
-      if (location.hash.length > 1) hashTarget.scrollIntoView({ block: 'start' });
-    };
-    window.addEventListener('load', () => window.setTimeout(realign, 80));
-    document.fonts?.ready.then(() => window.setTimeout(realign, 80));
+    preparedReset?.addEventListener('click', () => {
+      if (preparedSection) preparedSection.hidden = true;
+      const first = nameField || briefField;
+      first?.focus();
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      form.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
+      updateTranscript();
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const service = params.get('service');
+    const situation = params.get('situation');
+    if (service && prefills.services && prefills.services[service] && briefField && !valueOf(briefField)) {
+      briefField.value = prefills.services[service];
+    }
+    if (situation && prefills.situations && prefills.situations[situation] && situationField && !valueOf(situationField)) {
+      situationField.value = prefills.situations[situation];
+    }
+
+    updateTranscript();
   }
 
-  // A failed content image leaves a readable note instead of an empty frame.
-  function showImageFallback(image) {
-    if (image.dataset.fallbackApplied || !image.closest('main') || !image.alt.trim()) return;
-    image.dataset.fallbackApplied = 'true';
-    image.classList.add('is-missing');
-    const note = document.createElement('span');
-    note.className = 'img-fallback';
-    note.textContent = `Image unavailable: ${image.alt.trim()}`;
-    image.insertAdjacentElement('afterend', note);
+  function initHashFocus() {
+    if (!window.location.hash) return;
+    let target = null;
+    try {
+      target = doc.querySelector(window.location.hash);
+    } catch (error) {
+      target = null;
+    }
+    if (!target) return;
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
   }
-  document.addEventListener('error', event => {
-    if (event.target instanceof HTMLImageElement) showImageFallback(event.target);
-  }, true);
 
-  document.querySelectorAll('[data-year]').forEach(item => { item.textContent = String(new Date().getFullYear()); });
+  initHeader();
+  initDisclosures();
+  initMenu();
+  initScrollRegions();
+  initPicker();
+  initWork();
+  initIntake();
+  initHashFocus();
+  initReveals();
 })();
