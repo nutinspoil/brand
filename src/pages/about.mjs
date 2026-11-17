@@ -62,13 +62,14 @@ export function aboutPage() {
       </div>
     </section>
 
-    <section class="band band--frost" id="philosophy" aria-labelledby="philosophy-title">
+    <section class="band band--ink philosophy-band" id="philosophy" aria-labelledby="philosophy-title">
       <div class="shell">
         ${sectionHead({
           eyebrow: 'Philosophy',
           title: 'Action, discipline, roots.',
           lead: 'These are working commitments, not slogans. Each one changes how a project is run.',
-          id: 'philosophy-title'
+          id: 'philosophy-title',
+          className: 'section-head--margin'
         })}
         <div class="philosophy">${ABOUT.philosophy
           .map(
@@ -88,7 +89,8 @@ export function aboutPage() {
           eyebrow: 'Working values',
           title: 'How the work is handled.',
           lead: 'Specific language, honest evidence, one owner, and a clean exit.',
-          id: 'values-title'
+          id: 'values-title',
+          className: 'section-head--margin'
         })}
         <div class="values">${ABOUT.values
           .map(
@@ -102,14 +104,14 @@ export function aboutPage() {
       </div>
     </section>
 
-    <section class="band band--frost band--tight" aria-labelledby="relationship-title">
+    <section class="band relationship-band" aria-labelledby="relationship-title">
       <div class="shell">
-        <div class="relationship">
-          <div>
+        <div class="relationship-editorial">
+          <div class="relationship-editorial__head">
             ${kicker('Brand and founder')}
-            <h2 class="title-2" id="relationship-title">${ABOUT.relationship.title}</h2>
+            <h2 id="relationship-title">${ABOUT.relationship.title}</h2>
           </div>
-          <div class="relationship__cols">
+          <div class="relationship-editorial__cols">
             <div>
               <h3>This site</h3>
               <p>${ABOUT.relationship.brand}</p>

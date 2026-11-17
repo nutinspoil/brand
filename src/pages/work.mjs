@@ -19,7 +19,7 @@ const FILTERS = [
 
 export function workPage() {
   const groups = GROUPS.map(
-    group => `<section class="work-group" data-work-group id="${GROUP_IDS[group.key]}" aria-labelledby="group-${group.key}">
+    group => `<section class="work-group work-group--${group.key}" data-work-group id="${GROUP_IDS[group.key]}" aria-labelledby="group-${group.key}">
       <div class="work-group__head">
         <h2 class="title-2" id="group-${group.key}">${group.title}</h2>
         <p>${group.lead}</p>
@@ -45,6 +45,20 @@ export function workPage() {
       </div>`
     })}
   </div>
+
+  <section class="band band--ink work-protocol" aria-labelledby="protocol-title">
+    <div class="shell work-protocol__grid">
+      <div>
+        <p class="kicker">Evidence protocol</p>
+        <h2 class="title-2" id="protocol-title">Every card states what it can prove.</h2>
+      </div>
+      <ul class="work-protocol__rules">
+        <li><span>Public</span><p>Live work you can open, with published captures of the customer experience.</p></li>
+        <li><span>Private</span><p>Client records are withheld. Workflow, roles, and system logic are shown instead.</p></li>
+        <li><span>Prototype</span><p>Active tests of product direction. These are not released products.</p></li>
+      </ul>
+    </div>
+  </section>
 
   <section class="band band--frost band--tight" aria-labelledby="work-index-title">
     <div class="shell">
@@ -79,7 +93,6 @@ export function workPage() {
           </div>
         </div>
       </div>
-      <p class="work-boundary">Work cards carry their own evidence boundary. Private systems show workflow and roles instead of client records. Prototypes are labelled as tests, not releases.</p>
     </div>
   </section>
 

@@ -62,7 +62,8 @@ export function insightsPage() {
           eyebrow: 'Guides',
           title: 'Each guide helps make one decision.',
           lead: 'No trends, no listicles. A situation, the decision it forces, and the conditions under which the answer changes.',
-          id: 'guides-title'
+          id: 'guides-title',
+          className: 'section-head--statement'
         })}
         <ul class="article-rows">${rest
           .map(
@@ -85,7 +86,8 @@ export function insightsPage() {
           eyebrow: 'By decision',
           title: 'Browse by the problem in front of you.',
           lead: 'A light index. Topics connect to the guide or the page that carries the decision.',
-          id: 'topics-title'
+          id: 'topics-title',
+          className: 'section-head--margin'
         })}
         <ul class="topic-list">${TOPICS
           .map(
@@ -216,7 +218,8 @@ export function articlePage(slug) {
           eyebrow: 'In the work',
           title: 'Where this decision appears here.',
           lead: 'The relevant product state, with its evidence boundary.',
-          id: 'article-proof-title'
+          id: 'article-proof-title',
+          className: 'section-head--margin'
         })}
         ${proofStrip(article.proof)}
       </div>

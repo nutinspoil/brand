@@ -1,4 +1,4 @@
-import { breadcrumb, kicker } from '../components/primitives.mjs';
+import { kicker } from '../components/primitives.mjs';
 import { renderDocument } from '../components/layout.mjs';
 import { COOKIES, PRIVACY, TERMS } from '../content/legal.mjs';
 
@@ -18,7 +18,6 @@ function legalPage(doc) {
 
   const body = `
     <div class="shell">
-      ${breadcrumb([{ label: doc.title }])}
       <header class="legal-header">
         <div>
           ${kicker(doc.eyebrow)}

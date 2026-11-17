@@ -52,7 +52,8 @@ function captureStrip(captures, label) {
         eyebrow: 'Evidence',
         title: label,
         lead: 'Each capture is taken from the live product. The caption says what the state shows, not what it might become.',
-        id: 'captures-title'
+        id: 'captures-title',
+        className: 'section-head--statement'
       })}
       <div class="capture-grid">
         ${captures
@@ -152,7 +153,8 @@ export function nsCasePage() {
           eyebrow: 'Workflow',
           title: 'From interest to an informed enquiry.',
           lead: 'The site carries the decision until the guest is ready to talk to the property.',
-          id: 'flow-title'
+          id: 'flow-title',
+          className: 'section-head--margin'
         })}
         ${workflowRail(data.workflow, { label: 'Guest journey' })}
       </div>
@@ -163,7 +165,8 @@ export function nsCasePage() {
           eyebrow: 'Decisions',
           title: 'Three decisions, each paired with evidence.',
           lead: 'The reasoning matters only if the published state supports it.',
-          id: 'decisions-title'
+          id: 'decisions-title',
+          className: 'section-head--statement'
         })}
         ${decisionModules(data.decisions, data.captures)}
       </div>
@@ -224,7 +227,8 @@ export function crCasePage() {
           eyebrow: 'Workflow',
           title: 'What is captured, and what is not.',
           lead: 'The visible states stop where the public evidence stops. Delivery and order placement are marked as unverified.',
-          id: 'flow-title'
+          id: 'flow-title',
+          className: 'section-head--margin'
         })}
         ${workflowRail(data.workflow, { label: 'Shopping journey' })}
         <p class="band__aside">The two unverified steps are not shown as working screenshots. That boundary is part of the evidence.</p>
@@ -236,7 +240,8 @@ export function crCasePage() {
           eyebrow: 'Decisions',
           title: 'Structure first, campaign second.',
           lead: 'The storefront holds product information once, in a form customers can use.',
-          id: 'decisions-title'
+          id: 'decisions-title',
+          className: 'section-head--statement'
         })}
         ${decisionModules(data.decisions, data.captures)}
       </div>
@@ -292,7 +297,8 @@ export function posCasePage() {
           eyebrow: 'System logic',
           title: 'One sale, recorded once, closed against evidence.',
           lead: data.system,
-          id: 'schematic-title'
+          id: 'schematic-title',
+          className: 'section-head--margin'
         })}
         ${workflowDiagram()}
       </div>
@@ -326,7 +332,8 @@ export function posCasePage() {
           eyebrow: 'Walkthrough',
           title: 'The counter workflow, step by step.',
           lead: 'Each step creates or changes a record. Nothing is reconstructed later from memory.',
-          id: 'walkthrough-title'
+          id: 'walkthrough-title',
+          className: 'section-head--statement'
         })}
         <div class="pos-walkthrough">
           <ol class="pos-steps">

@@ -11,14 +11,16 @@ export function ctaPanel({
   className = ''
 }) {
   return `<section class="cta-panel ${className}" aria-labelledby="${id}">
-    <div class="cta-panel__body">
-      ${kicker(eyebrow)}
-      <h2 class="cta-panel__title" id="${id}">${title}</h2>
-      <p class="cta-panel__lead">${body}</p>
-    </div>
-    <div class="cta-panel__actions">
-      ${primary ? btn({ label: primary.label, href: primary.href, variant: 'light', external: primary.external, icon: primary.external ? 'up-right' : 'right' }) : ''}
-      ${secondary ? btn({ label: secondary.label, href: secondary.href, variant: 'outline-light', external: secondary.external, icon: secondary.external ? 'up-right' : 'right' }) : ''}
+    <div class="cta-panel__inner">
+      <div class="cta-panel__body">
+        ${kicker(eyebrow)}
+        <h2 class="cta-panel__title" id="${id}">${title}</h2>
+        <p class="cta-panel__lead">${body}</p>
+      </div>
+      <div class="cta-panel__actions">
+        ${primary ? btn({ label: primary.label, href: primary.href, variant: 'light', external: primary.external, icon: primary.external ? 'up-right' : 'right' }) : ''}
+        ${secondary ? btn({ label: secondary.label, href: secondary.href, variant: 'outline-light', external: secondary.external, icon: secondary.external ? 'up-right' : 'right' }) : ''}
+      </div>
     </div>
   </section>`;
 }

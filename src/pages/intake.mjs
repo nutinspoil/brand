@@ -1,5 +1,5 @@
 import { json, esc } from '../lib/html.mjs';
-import { btn, chip, facts, kicker, note } from '../components/primitives.mjs';
+import { btn, chip, kicker, note } from '../components/primitives.mjs';
 import { ctaPanel, pageIntro } from '../components/blocks.mjs';
 import { renderDocument } from '../components/layout.mjs';
 import { SITE } from '../content/site.mjs';
@@ -238,17 +238,21 @@ export function intakePage() {
 }
 
 export function contactPage() {
+  const contactTitle = CONTACT.title.replace(
+    'what you are trying to create.',
+    '<em>what you are trying to create.</em>'
+  );
+  const facts = `<dl class="contact-strip">${CONTACT.facts
+    .map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`)
+    .join('')}</dl>`;
   const body = `
     <div class="shell">
-      ${pageIntro({
-        eyebrow: CONTACT.eyebrow,
-        title: CONTACT.title,
-        lead: CONTACT.lead,
-        aside: `<div class="intro-aside">
-          ${facts(CONTACT.facts)}
-          <p class="intro-aside__line">${CONTACT.founderNote}</p>
-        </div>`
-      })}
+      <header class="contact-opener">
+        ${kicker(CONTACT.eyebrow)}
+        <h1 class="title-1" id="page-title">${contactTitle}</h1>
+        <p class="lead lead--large">${CONTACT.lead}</p>
+        ${facts}
+      </header>
     </div>
 
     <section class="band band--frost" aria-labelledby="contact-options-title">
@@ -286,22 +290,18 @@ export function contactPage() {
       </div>
     </section>
 
-    <section class="band band--frost band--tight" aria-labelledby="contact-founder-title">
-      <div class="shell founder-strip">
+    <section class="band founder-line" aria-labelledby="contact-founder-title">
+      <div class="shell founder-line__grid">
         <div>
           <p class="kicker">The founder</p>
-          <h2 class="title-2" id="contact-founder-title">Every enquiry is read by Emmanuel.</h2>
-          <p>${CONTACT.founderNote}</p>
-          <p>${CONTACT.portfolio.label}</p>
-          <a class="text-link" href="${CONTACT.portfolio.href}" target="_blank" rel="noopener noreferrer">${CONTACT.portfolio.action}<span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
+          <h2 class="founder-line__quote" id="contact-founder-title">Every enquiry is read by the person who would do the work.</h2>
         </div>
-        <div class="founder-strip__facts">
-          ${facts([
-            ['Founder', 'Emmanuel Drah'],
-            ['Base', 'Ghana'],
-            ['Reply channel', 'WhatsApp'],
-            ['Public email', 'Not published']
-          ])}
+        <div class="founder-line__body">
+          <p>There is no separate sales team.</p>
+          <div class="founder-line__portfolio">
+            <p>${CONTACT.portfolio.label}</p>
+            <a class="text-link" href="${CONTACT.portfolio.href}" target="_blank" rel="noopener noreferrer">${CONTACT.portfolio.action}<span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
+          </div>
         </div>
       </div>
     </section>

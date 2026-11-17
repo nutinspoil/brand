@@ -260,9 +260,11 @@ export function proofStrip(ids) {
       const href = project.caseStudyHref || project.primaryHref || '/work/';
       return `<a class="proof-strip__item" href="${href}">
         <span class="proof-strip__media">${media}</span>
-        <span class="proof-strip__meta">${statusBadge(project.status, { short: true })}<span>${esc(project.type)}</span></span>
-        <strong>${esc(project.title)}</strong>
-        <span class="proof-strip__result">${esc(project.resultOrState)}</span>
+        <span class="proof-strip__copy">
+          <span class="proof-strip__meta">${statusBadge(project.status, { short: true })}<span>${esc(project.type)}</span></span>
+          <strong>${esc(project.title)}</strong>
+          <span class="proof-strip__result">${esc(project.resultOrState)}</span>
+        </span>
       </a>`;
     })
     .join('')}</div>`;

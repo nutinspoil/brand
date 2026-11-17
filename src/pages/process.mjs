@@ -95,7 +95,8 @@ export function processPage() {
           eyebrow: 'Seven stages',
           title: 'One system, from first conversation to a named owner.',
           lead: 'Every stage has an input, a defined piece of work, an output, and the decision that lets the work move on.',
-          id: 'stages-title'
+          id: 'stages-title',
+          className: 'section-head--statement'
         })}
         <ol class="stages">${stages}</ol>
       </div>
@@ -118,7 +119,7 @@ export function processPage() {
       </div>
     </section>
 
-    <section class="band" aria-labelledby="ownership-title">
+    <section class="band band--ink" aria-labelledby="ownership-title">
       <div class="shell">
         <div class="ownership">
           <div>
@@ -144,7 +145,8 @@ export function processPage() {
           eyebrow: 'Entry routes',
           title: 'Three ways to begin.',
           lead: 'Each route leads to the same first step: enough context to name a useful next move.',
-          id: 'entry-title'
+          id: 'entry-title',
+          className: 'section-head--margin'
         })}
         <div class="entry-routes">${routes}</div>
       </div>

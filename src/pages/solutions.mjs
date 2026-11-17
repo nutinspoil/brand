@@ -107,7 +107,8 @@ export function solutionsPage() {
           eyebrow: 'Diagnostic',
           title: 'Five situations, each with a different first move.',
           lead: 'Find the closest description. The evidence and the path belong to that situation, not to a service menu.',
-          id: 'situations-title'
+          id: 'situations-title',
+          className: 'section-head--statement'
         })}
         <div class="situation-list">${modules}</div>
       </div>
@@ -119,7 +120,8 @@ export function solutionsPage() {
           eyebrow: 'In practice',
           title: 'What the work looks like when the situation is named.',
           lead: 'A quick route from each situation into the nearest public evidence.',
-          id: 'practice-title'
+          id: 'practice-title',
+          className: 'section-head--margin'
         })}
         <div class="practice-strip">${practice}</div>
       </div>
@@ -181,7 +183,8 @@ export function solutionPage(key) {
           eyebrow: 'The situation',
           title: 'What is happening now.',
           lead: detail.situation,
-          id: 'situation-title'
+          id: 'situation-title',
+          className: 'section-head--statement'
         })}
         <div class="signals-grid">
           <div>
@@ -204,7 +207,8 @@ export function solutionPage(key) {
           eyebrow: 'Evidence',
           title: 'The nearest work to this situation.',
           lead: 'The proof is shown before the recommendation. Each card keeps its own status and boundary.',
-          id: 'proof-title'
+          id: 'proof-title',
+          className: 'section-head--margin'
         })}
         ${proofStrip(detail.proof)}
       </div>

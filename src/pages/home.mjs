@@ -91,7 +91,8 @@ export function homePage() {
         eyebrow: 'In use · Public product',
         title: 'The first proof is a product guests can use.',
         lead: 'NS Luxury Villa is a public hospitality website in Lokoe, Ho. It carries the standard the rest of this site holds every product to: a specific situation, a specific change, and a result a guest can check.',
-        id: 'first-proof-title'
+        id: 'first-proof-title',
+        className: 'section-head--statement'
       })}
       ${featureProof(ns, {
         image: '/assets/img/work-nsvilla-rooms.jpg',
@@ -119,7 +120,8 @@ export function homePage() {
         eyebrow: 'What the evidence covers',
         title: 'Public, private and prototype work are not the same kind of proof.',
         lead: 'Status appears beside every project so the record is never mistaken for a release.',
-        id: 'kinds-title'
+        id: 'kinds-title',
+        className: 'section-head--margin'
       })}
       ${comparisonRow()}
     </div>
@@ -132,7 +134,8 @@ export function homePage() {
         title: 'What the brand builds.',
         lead: 'Products that need to work on a phone, in a shop, on a shift, and after handover.',
         action: { label: 'All services', href: '/services/' },
-        id: 'builds-title'
+        id: 'builds-title',
+        className: 'section-head--statement'
       })}
       <ul class="rows">
         ${BUILDS.map(
@@ -153,7 +156,8 @@ export function homePage() {
         eyebrow: 'Situations',
         title: 'Start from what is happening now.',
         lead: 'The right next step depends on what already exists. Pick the closest situation; the site shows the evidence that belongs to it.',
-        id: 'situations-title'
+        id: 'situations-title',
+        className: 'section-head--margin'
       })}
       <ul class="routes">
         ${SITUATIONS.map(

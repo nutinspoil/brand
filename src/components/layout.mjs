@@ -85,6 +85,9 @@ function header(path) {
         ${primaryNav(path, section)}
       </nav>
       <a class="button button--primary header__cta" href="/start-a-project/"${section === 'start' ? currentAttr(true) : ''}>Start a project<span class="button__arrow" aria-hidden="true">&#8594;</span></a>
+      <a class="header__wa" href="${DEFAULT_WA}" target="_blank" rel="noopener noreferrer" aria-label="Message Emmanuel on WhatsApp">
+        <img src="/assets/img/whatsapp.svg" alt="" width="20" height="20" loading="eager" decoding="async">
+      </a>
       <button class="menu-toggle" type="button" data-menu-open aria-expanded="false" aria-controls="mobile-nav">
         <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span></span>
         <span class="sr-only">Open menu</span>
@@ -185,9 +188,9 @@ export function renderDocument({
   ${header(path)}
   <main id="main" tabindex="-1">
     ${body}
+    ${floatingWhatsApp()}
   </main>
   ${footer()}
-  ${floatingWhatsApp()}
   <script src="/assets/js/site.js" defer></script>
 </body>
 </html>`;
